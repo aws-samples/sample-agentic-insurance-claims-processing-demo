@@ -336,6 +336,23 @@ This repository enforces Multi-Factor Authentication (MFA) via TOTP for all user
 
 Default demo credentials (`Test123!Pass`) are provided for three Cognito test users (`claimant1`, `adjuster1`, `business1`) across documentation and deployment scripts. These credentials are only meaningful within your own deployed Cognito User Pool and pose no risk to other environments. After deployment, you should change these passwords via the AWS Cognito console or CLI before exposing the application beyond demo/testing use.
 
+## Demo Limitations & Production Considerations
+
+This solution is a functional demonstration of AI-powered claims processing. For production use, the following areas require additional hardening:
+
+| Feature | Demo Behavior | Production Implementation |
+|---------|---------------|---------------------------|
+| **Policy Database** | In-memory Python dictionary (`POLICY_DATABASE` in claims_handler.py) with 9 pre-seeded policies. | Connect to an actual policy management system (e.g., DynamoDB table, external API, or legacy mainframe integration) with real-time policy status lookups. |
+| **Document Verification** | AI reads document text and cross-references claim data. No OCR or handwriting recognition. | Add Amazon Textract for scanned documents, Bedrock Data Automation for structured extraction, and implement document classification ML before analysis. |
+| **MCP Server Data** | Not applicable — all data is self-contained in DynamoDB and S3. | For enterprise integration, add MCP servers for external data feeds (mortality databases, fraud registries, policy admin systems). |
+| **Self-Signup** | Cognito allows self-registration (required for demo Quick-Fill scenarios). | Disable self-signup. Use admin-created accounts with enterprise SSO (SAML/OIDC) federation. |
+| **IAM Permissions** | Bedrock/AgentCore IAM roles use wildcard resources with documented cdk-nag suppressions. | Scope IAM policies to specific model ARNs, specific DynamoDB table ARNs, and specific S3 bucket ARNs. Remove managed policies. |
+| **Separation of Duties** | Single adjuster can approve/deny without peer review. Audit trail records `actionBy`. | Implement dual-approval workflow — initiator cannot be the same as approver. Add supervisor override with escalation. |
+| **VPC/Network** | Serverless Lambda without VPC. Bedrock APIs accessed over public internet (AWS backbone). | Deploy Lambda in VPC with PrivateLink endpoints for Bedrock, DynamoDB, and S3. Add VPC Flow Logs. |
+| **Structured Logging** | `print()` statements output to CloudWatch Logs. | Migrate to Python `logging` module with JSON structured format. Add correlation IDs, trace context (X-Ray), and log-level filtering. |
+| **WAF** | Rate limiting at API Gateway layer (100 burst/50 sustained). No WAF configured. | Add AWS WAF on both CloudFront and API Gateway with managed rule groups (SQL injection, XSS, bot control). |
+| **Disaster Recovery** | Single-region deployment. DynamoDB PITR enabled. S3 versioned. | Multi-region active-passive with DynamoDB Global Tables, S3 Cross-Region Replication, and Route 53 failover. |
+
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for information about reporting security issues.
