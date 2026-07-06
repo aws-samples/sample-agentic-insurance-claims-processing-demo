@@ -6,6 +6,7 @@ Usage: python3 load_test_data.py
 import boto3
 import json
 import os
+import sys
 import time
 from datetime import datetime
 
@@ -39,7 +40,7 @@ print(f"Documents Bucket: {DOCS_BUCKET}")
 if not CLAIMS_TABLE or not DOCS_BUCKET:
     print("ERROR: Could not find Claims table or Documents bucket.")
     print("Make sure the infrastructure stack is deployed.")
-    exit(1)
+    sys.exit(1)
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 s3 = boto3.client('s3', region_name='us-east-1')

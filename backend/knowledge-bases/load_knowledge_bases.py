@@ -7,6 +7,7 @@ Uploads knowledge base content to S3
 import boto3
 import json
 import os
+import sys
 from pathlib import Path
 
 # Initialize S3 client
@@ -18,7 +19,7 @@ KB_BUCKET = os.environ.get('KB_BUCKET', None)
 if not KB_BUCKET:
     # Try to read from outputs.json
     try:
-        with open('../infrastructure/outputs.json', 'r') as f:
+        with open('../infrastructure/outputs.json', 'r', encoding='utf-8') as f:
             outputs = json.load(f)
             for stack_outputs in outputs.values():
                 if 'KnowledgeBaseBucketName' in stack_outputs:
@@ -30,7 +31,7 @@ if not KB_BUCKET:
 if not KB_BUCKET:
     print("❌ Error: Could not determine Knowledge Base bucket name")
     print("Please set KB_BUCKET environment variable or ensure outputs.json exists")
-    exit(1)
+    sys.exit(1)
 
 # Knowledge base content
 KNOWLEDGE_BASES = {

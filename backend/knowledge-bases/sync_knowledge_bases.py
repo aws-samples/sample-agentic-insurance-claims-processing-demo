@@ -7,6 +7,7 @@ Triggers Bedrock Knowledge Base ingestion jobs
 import boto3
 import json
 import os
+import sys
 import time
 
 # Initialize Bedrock Agent client
@@ -18,7 +19,7 @@ def get_kb_ids():
     
     # Try to read from outputs.json
     try:
-        with open('../infrastructure/outputs.json', 'r') as f:
+        with open('../infrastructure/outputs.json', 'r', encoding='utf-8') as f:
             outputs = json.load(f)
             for stack_outputs in outputs.values():
                 if 'PolicyKBId' in stack_outputs:
@@ -111,7 +112,7 @@ def main():
     if not kb_ids:
         print("❌ Error: No knowledge base IDs found")
         print("Please ensure CDK stacks are deployed and outputs.json exists")
-        exit(1)
+        sys.exit(1)
     
     print(f"Found {len(kb_ids)} knowledge bases")
     print("")
