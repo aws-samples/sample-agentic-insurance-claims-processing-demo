@@ -17,11 +17,12 @@ dynamodb = boto3.resource('dynamodb')
 
 CLAIMS_TABLE = os.environ['CLAIMS_TABLE']
 METRICS_TABLE = os.environ['METRICS_TABLE']
+ALLOWED_ORIGIN = os.environ.get('ALLOWED_ORIGIN', '*')
 
 claims_table = dynamodb.Table(CLAIMS_TABLE)
 
 CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
     'Access-Control-Allow-Methods': 'GET,OPTIONS',
 }
@@ -138,6 +139,25 @@ def response(status_code, body):
     }
 
 
+def _get_user_info(event):
+    """Extract user identity and groups from Cognito authorizer."""
+    claims = event.get('requestContext', {}).get('authorizer', {}).get('claims', {})
+    return {
+        'username': claims.get('cognito:username', claims.get('sub', 'unknown')),
+        'groups': claims.get('cognito:groups', ''),
+    }
+
+
+def _require_group(event, allowed_groups):
+    """Check if user belongs to one of the allowed groups. Returns error response or None."""
+    user_info = _get_user_info(event)
+    user_groups = user_info.get('groups', '')
+    for group in allowed_groups:
+        if group.lower() in user_groups.lower():
+            return None
+    return response(403, {'error': 'Forbidden: insufficient permissions'})
+
+
 def handler(event, context):
     try:
         http_method = event.get('httpMethod', '')
@@ -145,7 +165,13 @@ def handler(event, context):
 
         if http_method == 'OPTIONS':
             return response(200, {})
-        elif 'dashboard' in path:
+
+        # Role check — only Adjusters and BusinessUsers can access metrics
+        auth_err = _require_group(event, ['Adjusters', 'BusinessUsers'])
+        if auth_err:
+            return auth_err
+
+        if 'dashboard' in path:
             return get_dashboard_metrics()
         elif 'breakdown' in path:
             return get_claims_breakdown()

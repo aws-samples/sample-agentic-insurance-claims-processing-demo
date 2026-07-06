@@ -5,6 +5,7 @@ Supports multiple document uploads per request.
 """
 import json
 import os
+import re as _re
 import logging
 import boto3
 import base64
@@ -20,11 +21,12 @@ dynamodb = boto3.resource('dynamodb')
 
 DOCUMENTS_BUCKET = os.environ['DOCUMENTS_BUCKET']
 CLAIMS_TABLE = os.environ['CLAIMS_TABLE']
+ALLOWED_ORIGIN = os.environ.get('ALLOWED_ORIGIN', '*')
 
 table = dynamodb.Table(CLAIMS_TABLE)
 
 CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
 }
@@ -93,6 +95,17 @@ def upload_documents(event):
 
         if not file_name or not file_content:
             continue
+
+        # Document type allowlist
+        VALID_DOCUMENT_TYPES = {'death_certificate', 'medical_records', 'beneficiary_id', 'policy_document', 'trust_document', 'other'}
+        if document_type not in VALID_DOCUMENT_TYPES:
+            document_type = 'other'
+
+        # Path sanitization — strip path separators and dangerous chars
+        file_name = _re.sub(r'[/\\\.\.]+', '_', file_name)
+        file_name = file_name.strip('._')
+        if not file_name:
+            file_name = 'unnamed'
 
         # Decode base64 content
         try:

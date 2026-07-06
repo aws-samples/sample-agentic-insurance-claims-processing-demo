@@ -336,6 +336,12 @@ def update_claim_status(claim_id: str, status: str, details: str) -> str:
     """
     import time
     from boto3.dynamodb.conditions import Key as DDBKey
+
+    # Validate status transition
+    VALID_STATUSES = {'processing', 'approved', 'denied', 'escalated'}
+    if status not in VALID_STATUSES:
+        return json.dumps({'success': False, 'error': f'Invalid status: {status}'})
+
     table = get_claims_table()
     timestamp = int(time.time())
 

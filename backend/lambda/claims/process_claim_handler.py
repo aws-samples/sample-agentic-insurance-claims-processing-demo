@@ -258,17 +258,25 @@ def _process_with_bedrock(claim: dict, documents: list) -> dict:
         documentsSection=documents_section,
     )
 
-    response = bedrock_runtime.invoke_model(
-        modelId=MODEL_ID,
-        contentType='application/json',
-        accept='application/json',
-        body=json.dumps({
+    guardrail_id = os.environ.get('GUARDRAIL_ID', '')
+    guardrail_version = os.environ.get('GUARDRAIL_VERSION', 'DRAFT')
+
+    invoke_params = {
+        'modelId': MODEL_ID,
+        'contentType': 'application/json',
+        'accept': 'application/json',
+        'body': json.dumps({
             'anthropic_version': 'bedrock-2023-05-31',
             'max_tokens': 2048,
             'messages': [{'role': 'user', 'content': prompt}],
             'temperature': 0.1,
         }),
-    )
+    }
+    if guardrail_id:
+        invoke_params['guardrailIdentifier'] = guardrail_id
+        invoke_params['guardrailVersion'] = guardrail_version
+
+    response = bedrock_runtime.invoke_model(**invoke_params)
 
     response_body = json.loads(response['body'].read())
     ai_text = response_body.get('content', [{}])[0].get('text', '{}')

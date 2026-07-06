@@ -21,6 +21,7 @@ export interface ApiStackProps extends cdk.StackProps {
   userPool: cognito.UserPool;
   supervisorRuntimeArn: string;
   frontendDomain: string;
+  guardrailId?: string;
 }
 
 export class ApiStack extends cdk.Stack {
@@ -71,7 +72,7 @@ export class ApiStack extends cdk.Stack {
       deployOptions: {
         stageName: 'prod',
         loggingLevel: apigateway.MethodLoggingLevel.INFO,
-        dataTraceEnabled: true,
+        dataTraceEnabled: false,
         metricsEnabled: true,
         throttlingBurstLimit: 100,
         throttlingRateLimit: 50,
@@ -149,6 +150,7 @@ export class ApiStack extends cdk.Stack {
         ALLOWED_ORIGIN: `https://${props.frontendDomain}`,
         EVENT_BUS_NAME: eventBus.eventBusName,
         MODEL_ID: modelId,
+        GUARDRAIL_ID: props.guardrailId || '',
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
     });
@@ -212,6 +214,7 @@ export class ApiStack extends cdk.Stack {
       environment: {
         DOCUMENTS_BUCKET: props.documentsBucket.bucketName,
         CLAIMS_TABLE: props.claimsTable.tableName,
+        ALLOWED_ORIGIN: `https://${props.frontendDomain}`,
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
     });
@@ -226,6 +229,7 @@ export class ApiStack extends cdk.Stack {
       environment: {
         CLAIMS_TABLE: props.claimsTable.tableName,
         METRICS_TABLE: props.metricsTable.tableName,
+        ALLOWED_ORIGIN: `https://${props.frontendDomain}`,
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
     });
@@ -240,6 +244,8 @@ export class ApiStack extends cdk.Stack {
       memorySize: 128,
       environment: {
         MODEL_ID: modelId,
+        ALLOWED_ORIGIN: `https://${props.frontendDomain}`,
+        GUARDRAIL_ID: props.guardrailId || '',
       },
       logRetention: logs.RetentionDays.ONE_MONTH,
     });

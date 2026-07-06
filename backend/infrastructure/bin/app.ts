@@ -47,6 +47,7 @@ const apiStack = new ApiStack(app, 'LifeInsuranceApiStack', {
   userPool: infraStack.userPool,
   supervisorRuntimeArn: agentStack.supervisorRuntimeArn,
   frontendDomain: infraStack.distribution.distributionDomainName,
+  guardrailId: infraStack.guardrailId,
 });
 
 // ================================================================
@@ -63,7 +64,7 @@ NagSuppressions.addStackSuppressions(infraStack, [
   { id: 'AwsSolutions-IAM4', reason: 'Lambda basic execution role is an AWS managed policy' },
   { id: 'AwsSolutions-L1', reason: 'Python 3.11 is the latest supported runtime for this use case' },
   { id: 'AwsSolutions-COG1', reason: 'Demo user pool - password policy meets minimum requirements' },
-  { id: 'AwsSolutions-COG2', reason: 'MFA not configured for demo - documented as production requirement' },
+  { id: 'AwsSolutions-COG2', reason: 'MFA (TOTP) is configured and required for all users' },
   { id: 'AwsSolutions-COG3', reason: 'Advanced security not available on Essentials pricing tier' },
   { id: 'AwsSolutions-COG8', reason: 'Plus tier not required for demo - documented as production requirement' },
   { id: 'AwsSolutions-CFR3', reason: 'CloudFront access logging not required for demo deployment' },
@@ -83,7 +84,7 @@ NagSuppressions.addStackSuppressions(agentStack, [
 NagSuppressions.addStackSuppressions(apiStack, [
   { id: 'AwsSolutions-IAM5', reason: 'Bedrock InvokeModel requires wildcard resource for cross-region inference' },
   { id: 'AwsSolutions-IAM4', reason: 'Lambda basic execution role is an AWS managed policy' },
-  { id: 'AwsSolutions-APIG2', reason: 'Request validation handled at Lambda layer with input sanitization' },
+  { id: 'AwsSolutions-APIG2', reason: 'Request validation handled at Lambda layer with field allowlists, length limits, and injection scanning' },
   { id: 'AwsSolutions-APIG3', reason: 'WAF on API Gateway is production enhancement - throttling and input validation configured' },
   { id: 'AwsSolutions-APIG4', reason: 'Cognito authorizer configured for all non-public endpoints' },
   { id: 'AwsSolutions-APIG1', reason: 'API Gateway access logging enabled via deploy options' },

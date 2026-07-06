@@ -10,8 +10,10 @@ bedrock_runtime = boto3.client('bedrock-runtime', region_name=os.environ.get('AW
 
 MODEL_ID = os.environ.get('MODEL_ID', 'us.anthropic.claude-sonnet-4-20250514-v1:0')
 
+ALLOWED_ORIGIN = os.environ.get('ALLOWED_ORIGIN', '*')
+
 CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
     'Access-Control-Allow-Methods': 'POST,OPTIONS',
 }
@@ -81,8 +83,11 @@ def handler(event, context):
         messages = []
         history = body.get('history', [])
         for h in history[-6:]:  # Keep last 6 messages for context
+            role = h.get('role', 'user')
+            if role not in ('user', 'assistant'):
+                role = 'user'
             messages.append({
-                'role': h.get('role', 'user'),
+                'role': role,
                 'content': h.get('content', ''),
             })
         messages.append({'role': 'user', 'content': message})

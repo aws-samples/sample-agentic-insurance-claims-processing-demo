@@ -47,6 +47,12 @@ def update_claim_decision(claim_id: str, decision: str, payout_amount: str, reas
         reasoning: Detailed reasoning for the decision
     """
     import time
+
+    # Validate decision parameter
+    VALID_DECISIONS = {'approve', 'deny', 'human_review'}
+    if decision not in VALID_DECISIONS:
+        return json.dumps({'success': False, 'error': f'Invalid decision: {decision}'})
+
     dynamodb = boto3.resource('dynamodb', region_name=REGION)
     table = dynamodb.Table(CLAIMS_TABLE)
     status_map = {'approve': 'Approved', 'deny': 'Denied', 'human_review': 'PendingReview'}

@@ -6,6 +6,7 @@ AI processing is triggered via Amazon EventBridge events
 """
 import json
 import os
+import re
 import logging
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -28,6 +29,36 @@ CORS_HEADERS = {
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
     'Access-Control-Allow-Methods': 'GET,POST,PUT,OPTIONS',
 }
+
+# ── Injection detection patterns (shared across create/resubmit) ──────
+_INJECTION_PATTERNS = [
+    r'ignore\s+(all\s+)?(previous|prior|above)\s+(instructions|prompts|context)',
+    r'you\s+are\s+now\s+(a|an|the)\s+',
+    r'<\s*system\s*>|<<\s*SYS\s*>>|\[INST\]',
+    r'(forget|disregard|override)\s+(everything|all|your)\s+(above|previous|instructions|rules)',
+    r'(\bDAN\b|do\s+anything\s+now|jailbreak|bypass\s+(safety|guardrail|filter))',
+]
+
+
+def _get_user_info(event):
+    """Extract user identity and groups from Cognito authorizer."""
+    claims = event.get('requestContext', {}).get('authorizer', {}).get('claims', {})
+    return {
+        'username': claims.get('cognito:username', claims.get('sub', 'unknown')),
+        'email': claims.get('email', ''),
+        'groups': claims.get('cognito:groups', ''),
+    }
+
+
+def _require_group(event, allowed_groups):
+    """Check if user belongs to one of the allowed groups. Returns error response or None."""
+    user_info = _get_user_info(event)
+    user_groups = user_info.get('groups', '')
+    # Groups come as a string like "[Adjusters]" or comma-separated
+    for group in allowed_groups:
+        if group.lower() in user_groups.lower():
+            return None  # Authorized
+    return response(403, {'error': 'Forbidden: insufficient permissions'})
 
 
 class DecimalEncoder(json.JSONEncoder):
@@ -307,14 +338,6 @@ def create_claim(event):
         return response(400, {'error': 'claimAmount must be a valid number'})
 
     # Prompt injection detection — scan free-text fields
-    _INJECTION_PATTERNS = [
-        r'ignore\s+(all\s+)?(previous|prior|above)\s+(instructions|prompts|context)',
-        r'you\s+are\s+now\s+(a|an|the)\s+',
-        r'<\s*system\s*>|<<\s*SYS\s*>>|\[INST\]',
-        r'(forget|disregard|override)\s+(everything|all|your)\s+(above|previous|instructions|rules)',
-        r'(\bDAN\b|do\s+anything\s+now|jailbreak|bypass\s+(safety|guardrail|filter))',
-    ]
-    import re
     for field in ['policyHolderName', 'beneficiaryName', 'causeOfDeath', 'relationship']:
         val = body.get(field, '')
         for pattern in _INJECTION_PATTERNS:
@@ -391,16 +414,29 @@ def list_claims(event):
 
 
 def get_claim(event):
-    """Get a specific claim by ID"""
+    """Get a specific claim by ID with role-based field filtering."""
     claim_id = event['pathParameters']['claimId']
     item = _get_claim_item(claim_id)
     if not item:
         return response(404, {'error': 'Claim not found'})
+
+    # Role-based response filtering: hide sensitive AI fields from Claimants
+    user_info = _get_user_info(event)
+    user_groups = user_info.get('groups', '').lower()
+    if 'claimants' in user_groups and 'adjusters' not in user_groups and 'businessusers' not in user_groups:
+        sensitive_fields = ['processingDetails', 'fraudScore', 'aiDecision', 'aiConfidence']
+        item = {k: v for k, v in item.items() if k not in sensitive_fields}
+
     return response(200, item)
 
 
 def update_claim(event):
-    """Update a claim"""
+    """Update a claim with field allowlist, role check, state validation, and audit."""
+    # Role check — only Claimants and Adjusters can update
+    auth_err = _require_group(event, ['Claimants', 'Adjusters'])
+    if auth_err:
+        return auth_err
+
     claim_id = event['pathParameters']['claimId']
     body = json.loads(event['body'])
     now = int(datetime.now().timestamp())
@@ -409,15 +445,35 @@ def update_claim(event):
     if not item:
         return response(404, {'error': 'Claim not found'})
 
+    # Block updates on terminal states
+    if item.get('status') in ('approved', 'denied'):
+        return response(400, {'error': 'Cannot update claims in terminal state (approved/denied)'})
+
+    # Field allowlist — only these fields can be updated
+    ALLOWED_UPDATE_FIELDS = {'causeOfDeath', 'relationship', 'additionalNotes', 'notes'}
+
     update_expr = 'SET updatedAt = :ts'
     expr_values = {':ts': now}
     expr_names = {}
 
     for key, value in body.items():
-        if key not in ('claimId', 'timestamp'):
-            update_expr += f', #{key} = :{key}'
-            expr_values[f':{key}'] = value
-            expr_names[f'#{key}'] = key
+        if key in ('claimId', 'timestamp'):
+            continue
+        if key not in ALLOWED_UPDATE_FIELDS:
+            return response(400, {'error': f'Field {key} cannot be updated'})
+        # Injection scanning on text fields
+        if isinstance(value, str):
+            for pattern in _INJECTION_PATTERNS:
+                if re.search(pattern, value, re.IGNORECASE):
+                    return response(400, {'error': 'Request rejected: input contains disallowed patterns'})
+        update_expr += f', #{key} = :{key}'
+        expr_values[f':{key}'] = value
+        expr_names[f'#{key}'] = key
+
+    # Add audit field
+    user_info = _get_user_info(event)
+    update_expr += ', actionBy = :actionBy'
+    expr_values[':actionBy'] = user_info['username']
 
     kwargs = {
         'Key': {'claimId': claim_id, 'timestamp': item['timestamp']},
@@ -432,7 +488,11 @@ def update_claim(event):
 
 
 def approve_claim(event):
-    """Approve a claim (adjuster only)"""
+    """Approve a claim (adjuster only) with role check, state validation, and audit."""
+    auth_err = _require_group(event, ['Adjusters'])
+    if auth_err:
+        return auth_err
+
     claim_id = event['pathParameters']['claimId']
     body = json.loads(event.get('body', '{}'))
     now = int(datetime.now().timestamp())
@@ -441,21 +501,32 @@ def approve_claim(event):
     if not item:
         return response(404, {'error': 'Claim not found'})
 
+    # State validation — can only approve claims in these states
+    if item.get('status') not in ('escalated', 'resubmitted', 'submitted'):
+        return response(400, {'error': 'Can only approve claims with status: escalated, resubmitted, or submitted'})
+
+    user_info = _get_user_info(event)
+
     table.update_item(
         Key={'claimId': claim_id, 'timestamp': item['timestamp']},
-        UpdateExpression='SET #s = :status, approvedAt = :ts, approvalNotes = :notes, updatedAt = :ts',
+        UpdateExpression='SET #s = :status, approvedAt = :ts, approvalNotes = :notes, updatedAt = :ts, actionBy = :actionBy',
         ExpressionAttributeNames={'#s': 'status'},
         ExpressionAttributeValues={
             ':status': 'approved',
             ':ts': now,
             ':notes': body.get('notes', ''),
+            ':actionBy': user_info['username'],
         },
     )
     return response(200, {'message': 'Claim approved', 'claimId': claim_id})
 
 
 def deny_claim(event):
-    """Deny a claim (adjuster only)"""
+    """Deny a claim (adjuster only) with role check, state validation, and audit."""
+    auth_err = _require_group(event, ['Adjusters'])
+    if auth_err:
+        return auth_err
+
     claim_id = event['pathParameters']['claimId']
     body = json.loads(event.get('body', '{}'))
     now = int(datetime.now().timestamp())
@@ -464,14 +535,21 @@ def deny_claim(event):
     if not item:
         return response(404, {'error': 'Claim not found'})
 
+    # State validation — can only deny claims in these states
+    if item.get('status') not in ('escalated', 'resubmitted', 'submitted'):
+        return response(400, {'error': 'Can only deny claims with status: escalated, resubmitted, or submitted'})
+
+    user_info = _get_user_info(event)
+
     table.update_item(
         Key={'claimId': claim_id, 'timestamp': item['timestamp']},
-        UpdateExpression='SET #s = :status, deniedAt = :ts, denialReason = :reason, updatedAt = :ts',
+        UpdateExpression='SET #s = :status, deniedAt = :ts, denialReason = :reason, updatedAt = :ts, actionBy = :actionBy',
         ExpressionAttributeNames={'#s': 'status'},
         ExpressionAttributeValues={
             ':status': 'denied',
             ':ts': now,
             ':reason': body.get('reason', 'No reason provided'),
+            ':actionBy': user_info['username'],
         },
     )
     return response(200, {'message': 'Claim denied', 'claimId': claim_id})
@@ -529,6 +607,15 @@ def resubmit_claim(event):
         val = body.get(field, '')
         if val and len(str(val)) > max_len:
             return response(400, {'error': f"Field '{field}' exceeds maximum length of {max_len} characters"})
+
+    # Prompt injection detection on resubmission free-text fields
+    for field in ['causeOfDeath', 'relationship', 'additionalNotes', 'notes']:
+        val = body.get(field, '')
+        if val:
+            for pattern in _INJECTION_PATTERNS:
+                if re.search(pattern, str(val), re.IGNORECASE):
+                    print(f"Prompt injection blocked in resubmit field '{field}'")
+                    return response(400, {'error': 'Request rejected: input contains disallowed patterns'})
 
     updatable_fields = ['causeOfDeath', 'relationship', 'additionalNotes']
     for field in updatable_fields:
@@ -604,6 +691,10 @@ def reset_demo(event):
     Clears all claims from DynamoDB and removes uploaded documents from S3.
     This gives a clean slate as if the system was freshly deployed.
     """
+    auth_err = _require_group(event, ['Adjusters'])
+    if auth_err:
+        return auth_err
+
     print("RESET: Starting demo reset...")
 
     # 1. Clear all claims from DynamoDB
