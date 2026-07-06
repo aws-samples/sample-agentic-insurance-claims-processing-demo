@@ -366,4 +366,10 @@ aws opensearchserverless list-collections --query 'collectionSummaries[?name==`l
 
 ---
 
+## License
+
+This project is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.
+
+---
+
 Built with Amazon Bedrock, AgentCore, and Claude Sonnet 4 for the insurance industry.
