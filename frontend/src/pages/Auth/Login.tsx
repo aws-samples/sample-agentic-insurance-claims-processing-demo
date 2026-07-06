@@ -1,21 +1,157 @@
 import { useState } from 'react'
 import { useAuthStore } from '@/stores/authStore'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Shield, Smartphone } from 'lucide-react'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { login, isLoading, error } = useAuthStore()
+  const [totpCode, setTotpCode] = useState('')
+  const { login, confirmMfa, isLoading, error, mfaStep, totpSecretKey, clearError } = useAuthStore()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    try {
-      await login(username, password)
-    } catch (err) {
-      // Error is handled by the store
+    await login(username, password)
+  }
+
+  const handleMfaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (totpCode.length === 6) {
+      await confirmMfa(totpCode)
     }
   }
 
+  // TOTP Setup screen (first-time enrollment)
+  if (mfaStep === 'TOTP_SETUP') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="card">
+            <div className="flex items-center gap-3 mb-6">
+              <Shield className="h-8 w-8 text-primary-600" />
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Set Up Two-Factor Authentication</h2>
+                <p className="text-sm text-gray-600">Required for account security</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800 font-medium mb-2">Steps:</p>
+                <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+                  <li>Open your authenticator app (Google Authenticator, Authy, 1Password)</li>
+                  <li>Add a new account using the key below</li>
+                  <li>Enter the 6-digit code from the app</li>
+                </ol>
+              </div>
+
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <p className="text-xs text-gray-500 uppercase font-medium mb-1">Secret Key (manual entry)</p>
+                <code className="text-sm font-mono text-gray-900 break-all select-all">
+                  {totpSecretKey}
+                </code>
+                <p className="text-xs text-gray-500 mt-2">Account: CCOEInsurance ({username})</p>
+              </div>
+
+              <form onSubmit={handleMfaSubmit} className="space-y-4">
+                <div>
+                  <label className="label">Verification Code</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    className="input text-center text-2xl tracking-widest font-mono"
+                    value={totpCode}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '')
+                      setTotpCode(val)
+                      clearError()
+                    }}
+                    placeholder="000000"
+                    required
+                    autoFocus
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Enter the 6-digit code from your authenticator app</p>
+                </div>
+
+                {error && (
+                  <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
+                    <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                    <span className="text-sm">{error}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="btn-primary w-full"
+                  disabled={isLoading || totpCode.length !== 6}
+                >
+                  {isLoading ? 'Verifying...' : 'Complete Setup'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // TOTP Code entry screen (subsequent logins)
+  if (mfaStep === 'TOTP_CODE') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="card">
+            <div className="flex items-center gap-3 mb-6">
+              <Smartphone className="h-8 w-8 text-primary-600" />
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">Two-Factor Authentication</h2>
+                <p className="text-sm text-gray-600">Enter the code from your authenticator app</p>
+              </div>
+            </div>
+
+            <form onSubmit={handleMfaSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  className="input text-center text-2xl tracking-widest font-mono"
+                  value={totpCode}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '')
+                    setTotpCode(val)
+                    clearError()
+                  }}
+                  placeholder="000000"
+                  required
+                  autoFocus
+                />
+              </div>
+
+              {error && (
+                <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg">
+                  <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                  <span className="text-sm">{error}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn-primary w-full"
+                disabled={isLoading || totpCode.length !== 6}
+              >
+                {isLoading ? 'Verifying...' : 'Verify'}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Normal login screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
@@ -29,7 +165,7 @@ export default function Login() {
         <div className="card">
           <h2 className="text-2xl font-semibold text-gray-900 mb-6">Sign In</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="label">Email or Username</label>
               <input
@@ -76,9 +212,9 @@ export default function Login() {
               Demo Test Users:
             </p>
             <div className="mt-2 space-y-1 text-xs text-gray-500">
-              <p>Claimant: claimant1 / Test123!</p>
-              <p>Adjuster: adjuster1 / Test123!</p>
-              <p>Business: business1 / Test123!</p>
+              <p>Claimant: claimant1 / Test123!Pass</p>
+              <p>Adjuster: adjuster1 / Test123!Pass</p>
+              <p>Business: business1 / Test123!Pass</p>
             </div>
           </div>
         </div>
