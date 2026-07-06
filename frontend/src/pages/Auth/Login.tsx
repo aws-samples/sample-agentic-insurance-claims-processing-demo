@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { AlertCircle, Shield, Smartphone } from 'lucide-react'
+import { QRCodeSVG } from 'qrcode.react'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [totpCode, setTotpCode] = useState('')
-  const { login, confirmMfa, isLoading, error, mfaStep, totpSecretKey, clearError } = useAuthStore()
+  const { login, confirmMfa, isLoading, error, mfaStep, totpSecretKey, totpSetupUri, clearError } = useAuthStore()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -45,11 +46,20 @@ export default function Login() {
               </div>
 
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <p className="text-xs text-gray-500 uppercase font-medium mb-1">Secret Key (manual entry)</p>
-                <code className="text-sm font-mono text-gray-900 break-all select-all">
-                  {totpSecretKey}
-                </code>
-                <p className="text-xs text-gray-500 mt-2">Account: CCOEInsurance ({username})</p>
+                <div className="flex justify-center mb-3">
+                  {totpSetupUri && (
+                    <QRCodeSVG value={totpSetupUri} size={200} level="M" />
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 text-center">Scan this QR code with your authenticator app</p>
+                <details className="mt-3">
+                  <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600">
+                    Can't scan? Enter key manually
+                  </summary>
+                  <code className="text-xs font-mono text-gray-700 break-all select-all block mt-2">
+                    {totpSecretKey}
+                  </code>
+                </details>
               </div>
 
               <form onSubmit={handleMfaSubmit} className="space-y-4">
