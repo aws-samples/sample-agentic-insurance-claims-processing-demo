@@ -58,7 +58,20 @@ export default function ResubmitPanel({ claim, onResubmitted }: ResubmitPanelPro
   // Parse previous reasoning and simplify for claimant
   let claimantMessage = ''
   try {
-    if (claim.processingDetails) {
+    // Check for claimant-safe documentStatus field (set by backend for missing docs)
+    const docStatus = claim.documentStatus || ''
+    if (docStatus && docStatus.toLowerCase().includes('missing')) {
+      const missingDocs: string[] = []
+      if (docStatus.toLowerCase().includes('death certificate')) missingDocs.push('Death Certificate (certified copy)')
+      if (docStatus.toLowerCase().includes('medical record')) missingDocs.push('Medical Records (hospital/physician records)')
+      if (docStatus.toLowerCase().includes('beneficiary id')) missingDocs.push('Beneficiary ID (government-issued photo ID)')
+      if (missingDocs.length > 0) {
+        claimantMessage = `To continue processing your claim, please upload the following missing documents:\n\n• ${missingDocs.join('\n• ')}`
+      }
+    }
+
+    // Fallback: try parsing processingDetails (available for adjusters or older data)
+    if (!claimantMessage && claim.processingDetails) {
       const details = typeof claim.processingDetails === 'string'
         ? JSON.parse(claim.processingDetails) : claim.processingDetails
 

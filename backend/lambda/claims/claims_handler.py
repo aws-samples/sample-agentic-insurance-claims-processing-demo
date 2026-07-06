@@ -424,8 +424,24 @@ def get_claim(event):
     user_info = _get_user_info(event)
     user_groups = user_info.get('groups', '').lower()
     if 'claimants' in user_groups and 'adjusters' not in user_groups and 'businessusers' not in user_groups:
+        # Extract claimant-safe info before removing sensitive fields
+        missing_docs = None
+        try:
+            details = item.get('processingDetails', '')
+            if details:
+                parsed = json.loads(details) if isinstance(details, str) else details
+                doc_findings = parsed.get('document_findings', '')
+                if 'missing' in doc_findings.lower():
+                    missing_docs = doc_findings
+        except (json.JSONDecodeError, TypeError, AttributeError):
+            pass
+
         sensitive_fields = ['processingDetails', 'fraudScore', 'aiDecision', 'aiConfidence']
         item = {k: v for k, v in item.items() if k not in sensitive_fields}
+
+        # Provide claimant-safe document status
+        if missing_docs:
+            item['documentStatus'] = missing_docs
 
     return response(200, item)
 
