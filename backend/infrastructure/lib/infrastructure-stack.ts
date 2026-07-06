@@ -166,13 +166,15 @@ export class InfrastructureStack extends cdk.Stack {
       },
       customAttributes: { role: new cognito.StringAttribute({ mutable: true }) },
       passwordPolicy: {
-        minLength: 8,
+        minLength: 12,
         requireLowercase: true,
         requireUppercase: true,
         requireDigits: true,
         requireSymbols: true,
       },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      mfa: cognito.Mfa.REQUIRED,
+      mfaSecondFactor: { sms: false, otp: true },
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 

@@ -340,9 +340,28 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for information
 
 ## Cleanup
 
+To avoid ongoing AWS charges, destroy all resources when done:
+
 ```bash
 cd backend/infrastructure
 cdk destroy --all --force
+```
+
+CDK handles most resources, but verify these are fully removed:
+
+```bash
+# Delete ECR images (may persist if CDK destroy fails mid-way)
+aws ecr describe-repositories --query 'repositories[?starts_with(repositoryName, `life-insurance/`)].repositoryName' --output text | \
+  xargs -I{} aws ecr delete-repository --repository-name {} --force
+
+# Verify S3 buckets are deleted (CDK autoDeleteObjects handles this, but confirm)
+aws s3 ls | grep life-insurance
+
+# Verify OpenSearch Serverless collection is deleted
+aws opensearchserverless list-collections --query 'collectionSummaries[?name==`life-insurance-kb`]'
+
+# Delete Cognito test users (if user pool persists)
+# aws cognito-idp admin-delete-user --user-pool-id <POOL_ID> --username claimant1
 ```
 
 ---

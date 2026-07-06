@@ -56,6 +56,12 @@ echo "Installing Python dependencies for OpenSearch..."
 pip3 install opensearch-py requests-aws4auth boto3 --quiet
 echo ""
 
+# Security: Dependency vulnerability scan
+echo "Scanning Python dependencies for known vulnerabilities..."
+pip3 install pip-audit --quiet
+pip-audit -r "$PROJECT_ROOT/backend/agents/requirements.txt" --progress-spinner off 2>&1 | tail -10 || echo "WARNING: pip-audit found vulnerabilities (review above)"
+echo ""
+
 ###############################################################################
 # PHASE 1: Model Selection
 ###############################################################################

@@ -57,6 +57,10 @@ credentials
 # Generated PDF documents (created by scripts/generate_demo_documents.py)
 test-data/documents/pdf/
 
+# Binary build artifacts (regenerated during deployment)
+backend/agents/layers/*.zip
+test-data/documents/*.zip
+
 # Internal review documents (not for public repo)
 docs/WELL_ARCHITECTED_REVIEW.md
 docs/APPSEC_SCAN_REPORT.md
