@@ -209,7 +209,7 @@ aws cognito-idp admin-create-user \
 aws cognito-idp admin-set-user-password \
   --user-pool-id $USER_POOL_ID \
   --username claimant1 \
-  --password 'Test123!' \
+  --password 'Test123!Pass' \
   --permanent \
   --region $REGION
 
@@ -234,7 +234,7 @@ aws cognito-idp admin-create-user \
 aws cognito-idp admin-set-user-password \
   --user-pool-id $USER_POOL_ID \
   --username adjuster1 \
-  --password 'Test123!' \
+  --password 'Test123!Pass' \
   --permanent \
   --region $REGION
 
@@ -259,7 +259,7 @@ aws cognito-idp admin-create-user \
 aws cognito-idp admin-set-user-password \
   --user-pool-id $USER_POOL_ID \
   --username business1 \
-  --password 'Test123!' \
+  --password 'Test123!Pass' \
   --permanent \
   --region $REGION
 
@@ -272,6 +272,10 @@ aws cognito-idp admin-add-user-to-group \
 echo "  ✓ business1 created (BusinessUsers group)"
 echo ""
 echo "✓ All Cognito users created"
+echo ""
+echo "NOTE: MFA (TOTP) is required. On first login, each user will be"
+echo "prompted to set up their authenticator app (Google Authenticator,"
+echo "Authy, 1Password). The frontend handles this flow automatically."
 echo ""
 
 ###############################################################################

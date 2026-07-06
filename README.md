@@ -112,14 +112,14 @@ A complete demonstration of an AI-powered life insurance death benefits claims p
 
 ## User Portals
 
-### Claimant Portal (`claimant1` / `Test123!`)
+### Claimant Portal (`claimant1` / `Test123!Pass`)
 - Submit new claims with document upload (multi-file)
 - Demo Quick-Fill dropdown auto-fills all 9 test scenarios
 - Track claim status in real-time (submitted → processing → approved/denied/escalated)
 - View AI decision reasoning and document verification findings on claim details page
 - AI Claims Assistant chatbot (auto-opens) for FAQ guidance on required documents, process steps, and timelines
 
-### Adjuster Workbench (`adjuster1` / `Test123!`)
+### Adjuster Workbench (`adjuster1` / `Test123!Pass`)
 - Split claims queue: **Requires Action** (escalated, resubmitted) with notification counter, and **Completed** (approved, denied) for reference
 - Resubmitted claims highlighted with "UPDATED" badge and priority review notification
 - Escalation Reason panel explaining why a claim was escalated (amount threshold, fraud score, missing docs)
@@ -130,7 +130,7 @@ A complete demonstration of an AI-powered life insurance death benefits claims p
 - One-click approve/deny with claims removed from queue after action
 - Auto-polls while claims are processing to show live step progression
 
-### Business Dashboard (`business1` / `Test123!`)
+### Business Dashboard (`business1` / `Test123!Pass`)
 - Tabbed interface with 4 focused views:
   - **Overview**: Executive KPIs (total claims, STP rate, avg processing time, fraud detected), status donut chart, pipeline bar
   - **Operations**: Real-time processing with 10s auto-refresh, live claims feed, processing pipeline visualization
@@ -332,7 +332,9 @@ POST   /chat                - FAQ chatbot (claimant guidance, powered by Claude 
 
 ## Security Note
 
-This repository includes default demo credentials (`Test123!`) for three Cognito test users (`claimant1`, `adjuster1`, `business1`) across documentation and deployment scripts. These credentials are only meaningful within your own deployed Cognito User Pool and pose no risk to other environments. However, after deployment, you should change these passwords via the AWS Cognito console or CLI before exposing the application beyond demo/testing use.
+This repository enforces Multi-Factor Authentication (MFA) via TOTP for all users. On first login, each user is prompted to set up their authenticator app (Google Authenticator, Authy, 1Password, etc.) by scanning a QR code or entering a secret key manually. Subsequent logins require both the password and a 6-digit TOTP code.
+
+Default demo credentials (`Test123!Pass`) are provided for three Cognito test users (`claimant1`, `adjuster1`, `business1`) across documentation and deployment scripts. These credentials are only meaningful within your own deployed Cognito User Pool and pose no risk to other environments. After deployment, you should change these passwords via the AWS Cognito console or CLI before exposing the application beyond demo/testing use.
 
 ## Security
 
