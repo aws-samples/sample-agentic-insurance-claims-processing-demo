@@ -1,0 +1,63 @@
+====================================================
+     THORNTON FAMILY TRUST
+     TRUST CERTIFICATE
+====================================================
+
+TRUST NAME:            Thornton Family Trust
+EIN:                   XX-XXX4892
+DATE ESTABLISHED:      March 15, 2010
+TRUST TYPE:            Irrevocable Life Insurance Trust
+
+----------------------------------------------------
+GRANTOR
+----------------------------------------------------
+Name:                  Elizabeth Grace Thornton
+                       (Deceased - February 8, 2026)
+
+----------------------------------------------------
+TRUSTEES
+----------------------------------------------------
+Current Trustee:       Catherine Thornton-Wells
+Successor Trustee:     First National Bank of NY
+                       Trust Department
+
+----------------------------------------------------
+BENEFICIARIES
+----------------------------------------------------
+Primary:               Catherine Thornton-Wells (Daughter)
+Secondary:             Thornton Grandchildren
+                       (per stirpes distribution)
+
+----------------------------------------------------
+INSURANCE POLICY HELD IN TRUST
+----------------------------------------------------
+Policy Number:         LIP-2015-023456
+Issuer:                CCOE Insurance Industry LLC
+Face Amount:           $750,000.00
+Trust Allocation:      60% ($450,000.00)
+
+----------------------------------------------------
+TRUST PROVISIONS
+----------------------------------------------------
+Upon death of the grantor, the trustee shall:
+1. Collect insurance proceeds allocated to trust
+2. Distribute per trust schedule:
+   - 50% immediate distribution to Catherine
+   - 50% held in trust for grandchildren
+     (distributed at age 25)
+
+----------------------------------------------------
+CERTIFICATION
+----------------------------------------------------
+I, Catherine Thornton-Wells, as current Trustee,
+certify that this trust is valid and in effect as
+of the date of the grantor's death.
+
+Signed: Catherine Thornton-Wells
+Date: February 12, 2026
+Notarized: Yes (Notary Seal Applied)
+
+====================================================
+Attorney: Morrison & Associates, LLP
+New York, NY
+====================================================

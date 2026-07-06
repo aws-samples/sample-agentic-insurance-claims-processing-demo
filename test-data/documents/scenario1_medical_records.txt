@@ -1,0 +1,65 @@
+====================================================
+     HARTFORD HOSPITAL - MEDICAL RECORDS
+     DISCHARGE SUMMARY (DECEASED)
+====================================================
+
+PATIENT:               Robert James Mitchell
+MRN:                   HH-2026-041892
+DOB:                   03/12/1958
+ADMISSION DATE:        02/10/2026
+DISCHARGE DATE:        02/10/2026 (Deceased)
+ATTENDING PHYSICIAN:   Dr. Sarah Chen, MD
+
+----------------------------------------------------
+CHIEF COMPLAINT
+----------------------------------------------------
+Patient presented to ED via ambulance with severe
+chest pain, diaphoresis, and shortness of breath.
+Onset approximately 45 minutes prior to arrival.
+
+----------------------------------------------------
+HISTORY OF PRESENT ILLNESS
+----------------------------------------------------
+67-year-old male with known history of coronary artery
+disease, hypertension (20 years), and Type 2 diabetes
+mellitus. Patient was at home when he experienced
+sudden onset crushing substernal chest pain radiating
+to left arm. Wife called 911. Paramedics found patient
+in acute distress with ST elevation on field ECG.
+
+----------------------------------------------------
+HOSPITAL COURSE
+----------------------------------------------------
+Patient arrived in ED at 13:48. Initial ECG confirmed
+STEMI (anterior wall). Troponin I elevated at 8.2.
+Patient taken emergently to cardiac catheterization lab.
+During procedure, patient developed ventricular
+fibrillation. Despite aggressive resuscitation efforts
+including defibrillation x4, epinephrine, and
+amiodarone, patient could not be resuscitated.
+
+TIME OF DEATH: 14:32 EST
+
+----------------------------------------------------
+FINAL DIAGNOSIS
+----------------------------------------------------
+1. Acute ST-elevation myocardial infarction (anterior)
+2. Ventricular fibrillation - cardiac arrest
+3. Coronary artery disease - severe three-vessel
+4. Hypertension - chronic
+5. Type 2 Diabetes Mellitus
+
+----------------------------------------------------
+CAUSE OF DEATH
+----------------------------------------------------
+Immediate:    Acute Myocardial Infarction
+Due to:       Coronary Artery Disease
+Contributing: Hypertension, Type 2 Diabetes
+
+Manner of Death: Natural
+
+====================================================
+Electronically signed: Dr. Sarah Chen, MD
+Date: 02/11/2026
+Hartford Hospital, Hartford CT 06102
+====================================================

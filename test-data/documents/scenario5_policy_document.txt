@@ -1,0 +1,59 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2021-078345
+POLICY TYPE:           Whole Life Insurance
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Andrew Paul Kowalski
+Date of Birth:         September 14, 1970
+Address:               312 Oak Ridge Drive
+                       Columbus, OH 43215
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        May 1, 2021
+Face Amount:           $200,000.00
+Death Benefit:         $200,000.00
+Premium:               $395.00/month
+Premium Status:        Current (paid through March 2026)
+Cash Value:            $28,740.00
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Susan Marie Kowalski (Spouse)
+                       100% of death benefit
+Contingent:            Emily Kowalski (Daughter)
+                       100% of death benefit
+
+----------------------------------------------------
+RIDERS & EXCLUSIONS
+----------------------------------------------------
+Accidental Death:      Included (2x benefit)
+Waiver of Premium:     Included
+Contestability:        Period expired (policy > 4 years)
+Suicide Clause:        Not applicable (policy > 2 years)
+
+Standard Exclusions:
+- Death during commission of a felony
+- Death due to act of war
+- Material misrepresentation on application
+
+----------------------------------------------------
+LAST PREMIUM PAYMENT
+----------------------------------------------------
+Date:                  February 1, 2026
+Amount:                $395.00
+Method:                Auto-debit checking account
+
+====================================================
+Policy issued by CCOE Insurance Industry LLC
+Underwritten in the State of Ohio
+====================================================

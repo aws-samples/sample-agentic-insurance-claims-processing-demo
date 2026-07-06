@@ -1,0 +1,19 @@
+====================================================
+     BENEFICIARY IDENTIFICATION
+====================================================
+Document Type: Texas Driver's License
+License Number: TX-DL-89234567
+----------------------------------------------------
+Full Name:         Elena Rivera
+Date of Birth:     April 22, 1978
+Address:           4521 Magnolia Blvd, Houston, TX 77004
+Gender:            Female
+Issued:            March 15, 2024
+Expires:           April 22, 2030
+----------------------------------------------------
+Relationship to Deceased: Spouse
+Marriage Date: June 14, 2003
+----------------------------------------------------
+Verified against policy beneficiary designation:
+Elena Rivera (Spouse) - Primary 100%
+====================================================

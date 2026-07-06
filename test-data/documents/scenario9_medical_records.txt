@@ -1,0 +1,66 @@
+====================================================
+     ARMED FORCES MEDICAL EXAMINER SYSTEM (AFMES)
+     CASUALTY MEDICAL SUMMARY
+====================================================
+
+SERVICE MEMBER:        SGT Marcus Anthony Walsh
+DOD ID:                XXX-XX-6173
+BRANCH:                United States Army
+UNIT:                  3rd Brigade Combat Team,
+                       10th Mountain Division
+DUTY STATUS:           Active Duty
+CASUALTY REPORT #:     CJCS-2026-04782
+
+----------------------------------------------------
+CASUALTY CLASSIFICATION
+----------------------------------------------------
+Category:              Killed in Action (KIA)
+Date of Incident:      June 3, 2026
+Time of Incident:      09:17 Local Theater Time
+
+----------------------------------------------------
+SUMMARY OF INJURIES
+----------------------------------------------------
+Service member killed in action (KIA). Injuries
+sustained during combat patrol when vehicle struck
+by improvised explosive device (IED). Pronounced
+dead at field medical station by attending combat
+medic and battalion surgeon.
+
+Injuries included massive polytrauma with:
+- Severe blast injuries to torso and extremities
+- Traumatic brain injury
+- Injuries incompatible with life
+
+Death was immediate. No resuscitation attempted
+at point of injury due to severity of wounds.
+
+----------------------------------------------------
+POST-MORTEM
+----------------------------------------------------
+Remains transferred to Dover Air Force Base for
+dignified transfer and repatriation. Full autopsy
+conducted by Armed Forces Medical Examiner System
+(AFMES), Dover AFB, Delaware.
+
+Autopsy confirmed cause of death as multiple blast
+injuries sustained during military combat operations.
+Manner of death: Homicide (combat action by hostile
+forces).
+
+----------------------------------------------------
+NOTIFICATION
+----------------------------------------------------
+Casualty Assistance Officer assigned: CPT Elena
+Vasquez, Rear Detachment, Fort Drum, NY.
+Next of Kin notified: Rebecca Walsh (spouse),
+June 3, 2026 at 18:42 EST.
+
+DD Form 1300 (Report of Casualty) issued June 4, 2026.
+
+====================================================
+Prepared by: AFMES Casualty Records Division
+Reviewing Physician: COL David R. Harrington, MD
+Date: June 8, 2026
+Armed Forces Medical Examiner System, Dover AFB, DE
+====================================================

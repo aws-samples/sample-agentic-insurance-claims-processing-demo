@@ -1,0 +1,59 @@
+====================================================
+     IDENTIFICATION DOCUMENTS
+     Texas Driver's Licenses (Two Beneficiaries)
+====================================================
+
+============= BENEFICIARY 1 (50%) =================
+
+LICENSE NUMBER:        TX-DL-19284710
+TYPE:                  Class C - Standard
+
+Name:                  Linda Ann Foster
+Date of Birth:         May 17, 1962
+Sex:                   Female
+Height:                5'5"
+Eyes:                  Blue
+Address:               789 Longhorn Lane
+                       Temple, TX 76502
+
+Issue Date:            July 1, 2024
+Expiration Date:       May 17, 2030
+
+STATUS:                VALID
+
+Relationship:          Spouse of deceased
+Marriage Certificate:  On file (married August 1985)
+
+============= BENEFICIARY 2 (50%) =================
+
+LICENSE NUMBER:        TX-DL-28471093
+TYPE:                  Class C - Standard
+
+Name:                  Mark William Foster
+Date of Birth:         March 22, 1988
+Sex:                   Male
+Height:                6'1"
+Eyes:                  Brown
+Address:               1204 Congress Avenue, Apt 8
+                       Austin, TX 78701
+
+Issue Date:            September 15, 2025
+Expiration Date:       March 22, 2031
+
+STATUS:                VALID
+
+Relationship:          Son of deceased
+Birth Certificate:     On file (born Temple, TX)
+
+----------------------------------------------------
+NOTE: Beneficiary designation was changed from
+Linda Foster (100%) to split 50/50 between Linda
+Foster and Mark Foster on November 15, 2025 —
+approximately 3 months before the death. This
+change, combined with undisclosed pre-existing
+conditions, warrants human review.
+----------------------------------------------------
+
+====================================================
+Issued by TX Department of Public Safety
+====================================================

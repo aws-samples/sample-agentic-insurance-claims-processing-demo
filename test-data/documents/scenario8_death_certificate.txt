@@ -1,0 +1,35 @@
+====================================================
+         STATE OF TEXAS
+     CERTIFICATE OF DEATH
+====================================================
+CERTIFICATE NUMBER: DC-2026-045891
+DATE FILED: July 20, 2026
+----------------------------------------------------
+DECEDENT INFORMATION
+----------------------------------------------------
+Full Legal Name:       Samuel Thomas Rivera
+Date of Birth:         November 8, 1975
+Age at Death:          50 years
+Sex:                   Male
+SSN:                   XXX-XX-6734
+Marital Status:        Married
+----------------------------------------------------
+DEATH INFORMATION
+----------------------------------------------------
+Date of Death:         July 18, 2026
+Time of Death:         03:42 AM
+Place of Death:        Methodist Hospital, Houston, TX
+County:                Harris County
+Manner of Death:       Natural
+Cause of Death:        Acute myocardial infarction (cardiac arrest)
+Contributing Factors:  Hypertension, Type 2 Diabetes
+----------------------------------------------------
+CERTIFIER
+----------------------------------------------------
+Certifying Physician:  Dr. Angela Morales, MD
+License Number:        TX-28451
+Date Certified:        July 18, 2026
+----------------------------------------------------
+This is to certify that the above information is
+true and correct to the best of my knowledge.
+====================================================

@@ -1,0 +1,59 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2019-087234
+POLICY TYPE:           Whole Life Insurance
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Robert James Mitchell
+Date of Birth:         March 12, 1958
+Address:               142 Maple Avenue
+                       West Hartford, CT 06107
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        June 1, 2019
+Face Amount:           $250,000.00
+Death Benefit:         $250,000.00
+Premium:               $485.00/month
+Premium Status:        Current (paid through March 2026)
+Cash Value:            $42,180.00
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Margaret Anne Mitchell (Spouse)
+                       100% of death benefit
+Contingent:            David Robert Mitchell (Son)
+                       100% of death benefit
+
+----------------------------------------------------
+RIDERS & EXCLUSIONS
+----------------------------------------------------
+Accidental Death:      Included (2x benefit)
+Waiver of Premium:     Included
+Contestability:        Period expired (policy > 2 years)
+Suicide Clause:        Not applicable (policy > 2 years)
+
+Standard Exclusions:
+- Death during commission of a felony
+- Death due to act of war
+- Material misrepresentation on application
+
+----------------------------------------------------
+LAST PREMIUM PAYMENT
+----------------------------------------------------
+Date:                  February 1, 2026
+Amount:                $485.00
+Method:                Auto-debit checking account
+
+====================================================
+Policy issued by CCOE Insurance Industry LLC
+Underwritten in the State of Connecticut
+====================================================

@@ -1,0 +1,60 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2025-098712
+POLICY TYPE:           Term Life Insurance (20 Year)
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Daniel James Crawford
+Date of Birth:         June 20, 1988
+Address:               4521 Sunset Boulevard
+                       Los Angeles, CA 90027
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        August 1, 2025
+Face Amount:           $300,000.00
+Premium:               $145.00/month
+Premium Status:        Current
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Karen Crawford (Mother)
+                       100% of death benefit
+
+----------------------------------------------------
+CONTESTABILITY & EXCLUSIONS
+----------------------------------------------------
+Within 2-year contestability period: YES
+Policy age at death: 198 days (6.5 months)
+
+*** SUICIDE CLAUSE APPLIES ***
+Per policy Section 4.2: "If the insured dies by
+suicide within two (2) years from the policy
+effective date, the Company's liability shall be
+limited to a refund of premiums paid."
+
+Premiums paid to date: $1,015.00 (7 months)
+Maximum liability under suicide clause: $1,015.00
+
+----------------------------------------------------
+APPLICATION MEDICAL HISTORY
+----------------------------------------------------
+At time of application (July 2025):
+- Disclosed: None
+- Medical exam: Passed standard screening
+- Mental health history: NOT DISCLOSED
+
+NOTE: Medical examiner report indicates history of
+Major Depressive Disorder. This was not disclosed
+on the insurance application, which may constitute
+material misrepresentation.
+
+====================================================

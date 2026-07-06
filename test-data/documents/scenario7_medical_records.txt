@@ -1,0 +1,93 @@
+====================================================
+     BAYLOR SCOTT & WHITE MEDICAL CENTER
+     MEDICAL RECORDS - DISCHARGE SUMMARY (DECEASED)
+====================================================
+
+PATIENT:               William Henry Foster
+MRN:                   BSW-2026-054218
+DOB:                   12/05/1960
+ADMISSION DATE:        02/20/2026
+DISCHARGE DATE:        02/27/2026 (Deceased)
+ATTENDING PHYSICIAN:   Dr. Robert Kim, MD, Pulmonology
+
+----------------------------------------------------
+CHIEF COMPLAINT
+----------------------------------------------------
+65-year-old male presented to ED with severe
+dyspnea, productive cough with purulent sputum,
+fever (102.4°F), and oxygen saturation of 82%
+on room air.
+
+----------------------------------------------------
+HISTORY OF PRESENT ILLNESS
+----------------------------------------------------
+Patient has known history of COPD (diagnosed October
+2022) and congestive heart failure (diagnosed November
+2022). Has been on home oxygen therapy since June 2024.
+Symptoms worsened over 3 days prior to admission with
+increasing shortness of breath and productive cough.
+Wife (Linda Foster) brought patient to ED when he
+became confused and unable to walk to bathroom.
+
+----------------------------------------------------
+PAST MEDICAL HISTORY
+----------------------------------------------------
+- COPD, severe (diagnosed October 2022)
+  * FEV1 35% predicted at last PFT (Sept 2025)
+  * Home O2 2L/min continuous since June 2024
+  * Multiple exacerbations requiring hospitalization
+- Congestive Heart Failure (diagnosed November 2022)
+  * EF 30% on last echo (December 2025)
+  * NYHA Class III
+- Hypertension (20+ years, controlled)
+- Former smoker (40 pack-years, quit 2022)
+- Type 2 Diabetes (diagnosed 2018)
+
+*** NOTE: COPD and CHF were diagnosed in October
+and November 2022, respectively. Insurance application
+for policy LIP-2023-065478 was submitted December 2022.
+These conditions were NOT disclosed on the application.
+Only "mild hypertension" was reported. ***
+
+----------------------------------------------------
+HOSPITAL COURSE
+----------------------------------------------------
+Patient admitted to ICU with severe community-acquired
+pneumonia superimposed on COPD. Started on IV
+antibiotics (piperacillin-tazobactam, azithromycin),
+bronchodilators, and BiPAP ventilation. Initial
+improvement days 1-3. Day 4 developed ARDS requiring
+intubation and mechanical ventilation. Despite
+aggressive treatment including prone positioning and
+vasopressors, patient developed multi-organ failure.
+Family meeting held February 26 — wife and son
+elected comfort measures. Patient extubated per
+family wishes and passed peacefully on February 27.
+
+TIME OF DEATH: 16:45 CST
+
+----------------------------------------------------
+FINAL DIAGNOSIS
+----------------------------------------------------
+1. Community-acquired pneumonia, severe
+2. Acute respiratory distress syndrome (ARDS)
+3. COPD, severe — acute exacerbation
+4. Congestive heart failure, decompensated
+5. Multi-organ failure
+6. Type 2 Diabetes Mellitus
+7. Hypertension
+
+----------------------------------------------------
+CAUSE OF DEATH
+----------------------------------------------------
+Immediate:    Complications of Pneumonia
+Due to:       Chronic Obstructive Pulmonary Disease
+Contributing: Congestive Heart Failure
+
+Manner of Death: Natural
+
+====================================================
+Electronically signed: Dr. Robert Kim, MD
+Date: 02/28/2026
+Baylor Scott & White Medical Center, Temple TX 76508
+====================================================
