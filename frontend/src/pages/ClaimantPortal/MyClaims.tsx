@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { claimsApi } from '@/services/api'
-import { FileText, Plus, Clock, CheckCircle, XCircle, Loader2, RotateCcw } from 'lucide-react'
+import { FileText, Plus, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react'
 
 export default function MyClaims() {
   const [claims, setClaims] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [resetting, setResetting] = useState(false)
 
   const fetchClaims = async () => {
     try {
@@ -20,20 +19,6 @@ export default function MyClaims() {
   }
 
   useEffect(() => { fetchClaims() }, [])
-
-  const handleReset = async () => {
-    if (!confirm('Reset demo? This will delete ALL claims and uploaded documents. You can re-seed test data afterwards.')) return
-    setResetting(true)
-    try {
-      const result = await claimsApi.resetDemo()
-      alert(`Demo reset complete.\n\nClaims deleted: ${result.claimsDeleted}\nDocuments deleted: ${result.documentsDeleted}\n\nRun load_test_data.py to re-seed scenarios.`)
-      setClaims([])
-    } catch (error: any) {
-      alert('Reset failed: ' + (error.response?.data?.error || error.message))
-    } finally {
-      setResetting(false)
-    }
-  }
 
   const getStatusIcon = (status: string) => {
     switch (status?.toLowerCase()) {
@@ -73,14 +58,6 @@ export default function MyClaims() {
           <p className="page-subtitle">{claims.length} total claims</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleReset}
-            disabled={resetting}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {resetting ? <Loader2 className="h-4 w-4 animate-spin" /> : <RotateCcw className="h-4 w-4" />}
-            Reset Demo
-          </button>
           <Link to="/claimant/submit" className="btn-primary flex items-center gap-2">
             <Plus className="h-5 w-5" />
             Submit New Claim

@@ -3,7 +3,7 @@ import { claimsApi } from '@/services/api'
 import {
   ClipboardCheck, CheckCircle, XCircle, Brain, Loader2, FileSearch,
   FileText, UserCheck, Database, Globe, Shield, Search, Scale,
-  ChevronLeft, ChevronRight, Paperclip, AlertTriangle
+  ChevronLeft, ChevronRight, Paperclip, AlertTriangle, RotateCcw
 } from 'lucide-react'
 
 // ── Processing Flow Step Definitions ──────────────────────────────────
@@ -506,9 +506,27 @@ export default function AdjusterWorkbench() {
 
   return (
     <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h2 className="page-title">Adjuster Workbench</h2>
-        <p className="page-subtitle">Review and process pending claims</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h2 className="page-title">Adjuster Workbench</h2>
+          <p className="page-subtitle">Review and process pending claims</p>
+        </div>
+        <button
+          onClick={async () => {
+            if (!confirm('Reset demo? This will delete ALL claims and uploaded documents.')) return
+            try {
+              const result = await claimsApi.resetDemo()
+              alert(`Demo reset complete.\n\nClaims deleted: ${result.claimsDeleted}\nDocuments deleted: ${result.documentsDeleted}`)
+              window.location.reload()
+            } catch (error: any) {
+              alert('Reset failed: ' + (error.response?.data?.error || error.message))
+            }
+          }}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
+        >
+          <RotateCcw className="h-4 w-4" />
+          Reset Demo
+        </button>
       </div>
 
       <div className="flex gap-6">
