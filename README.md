@@ -1,6 +1,6 @@
 # CCOE Insurance Industry LLC - Death Benefits Claims Processing System
 
-> AI-powered claims processing system using Amazon Bedrock, AgentCore, and React — featuring automated claim adjudication with Claude Sonnet 4.
+> AI-powered claims processing system using Amazon Bedrock, AgentCore, and React — featuring automated claim adjudication with Amazon Bedrock.
 
 [![AWS](https://img.shields.io/badge/AWS-Bedrock-orange)](https://aws.amazon.com/bedrock/)
 [![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
@@ -11,11 +11,11 @@
 
 A complete demonstration of an AI-powered life insurance death benefits claims processing system featuring:
 
-- **AI Claim Adjudication** — Claude Sonnet 4 analyzes claims against policy data and makes approve/deny/escalate decisions
+- **AI Claim Adjudication** — AI (Claude Sonnet-class, configurable) analyzes claims against policy data and makes approve/deny/escalate decisions
 - **Empathetic Communication** — AI responses are written with compassion for bereaved families, with heightened sensitivity for military/combat losses
 - **Multi-Agent Architecture** — Supervisor + 5 specialist agents deployed on Bedrock AgentCore (ECR-based, ARM64 containers via CodeBuild)
 - **Three User Portals** — Claimant submission, Adjuster review workbench, Business analytics dashboard
-- **AI Claims Assistant Chatbot** — Empathetic FAQ chatbot for claimants (auto-opens, powered by Claude Sonnet 4)
+- **AI Claims Assistant Chatbot** — Empathetic FAQ chatbot for claimants (auto-opens, powered by Amazon Bedrock)
 - **AI Processing Flow Visualization** — 8-step multi-agent pipeline sidebar in Adjuster Workbench with real-time status
 - **Document Verification** — AI reads uploaded documents (death certificates, medical records, IDs) and includes findings in adjudication
 - **9 Demo Scenarios** — Pre-configured test cases covering auto-approve, auto-deny, fraud detection, and human escalation
@@ -165,7 +165,7 @@ See [docs/DEMO_TESTING_GUIDE.md](docs/DEMO_TESTING_GUIDE.md) for detailed walkth
 > sample. Prices are subject to change.
 
 ### Prerequisites
-- AWS Account with Bedrock model access (Claude Sonnet 4, Titan Embeddings)
+- AWS Account with Bedrock model access (Claude Sonnet-class or newer, Titan Embeddings)
 - Node.js 18+, Python 3.11+, AWS CLI, AWS CDK CLI
 
 ### Deploy
@@ -242,7 +242,7 @@ The demo defaults to Sonnet-tier for a good balance of capability and cost.
 ## Technology Stack
 
 ### Backend
-- Amazon Bedrock (Claude Sonnet 4 via InvokeModel)
+- Amazon Bedrock (configurable Claude model via InvokeModel)
 - Amazon Bedrock AgentCore (6 runtimes, ECR-based ARM64 containers via CodeBuild)
 - AWS Lambda (Python 3.11) — Claims, ProcessClaim, Documents, Metrics, Chat handlers
 - Amazon EventBridge (event-driven claim processing and resubmission)
@@ -268,7 +268,7 @@ The demo defaults to Sonnet-tier for a good balance of capability and cost.
 - Lucide React (icons)
 
 ### AI/ML
-- Claude Sonnet 4 (`us.anthropic.claude-sonnet-4-20250514-v1:0`) — claim adjudication
+- Claude Sonnet-class (configurable via `scripts/select_model.py`) — claim adjudication
 - Titan Embeddings — Knowledge Base vector embeddings
 - Bedrock Guardrails — content filtering, PII anonymization
 - Bedrock Knowledge Bases — RAG for policies, fraud patterns, regulations
@@ -316,7 +316,7 @@ POST   /claims/{id}/documents - Upload documents
 GET    /claims/{id}/documents - List documents
 GET    /metrics/dashboard   - Dashboard metrics (stats, STP rate, recent claims)
 GET    /metrics/breakdown   - Claims breakdown by amount
-POST   /chat                - FAQ chatbot (claimant guidance, powered by Claude Sonnet 4)
+POST   /chat                - FAQ chatbot (claimant guidance, powered by Bedrock)
 ```
 
 ## Documentation
@@ -391,4 +391,4 @@ This project is licensed under the MIT-0 License. See the [LICENSE](LICENSE) fil
 
 ---
 
-Built with Amazon Bedrock, AgentCore, and Claude Sonnet 4 for the insurance industry.
+Built with Amazon Bedrock, AgentCore, and Claude for the insurance industry.

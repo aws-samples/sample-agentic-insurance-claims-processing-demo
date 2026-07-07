@@ -4,7 +4,7 @@
 
 ## What Is This?
 
-An AI-powered life insurance death benefits claims processing system built on AWS. Claude Sonnet 4 automatically adjudicates claims, detects fraud, verifies documents, and routes complex cases to human adjusters.
+An AI-powered life insurance death benefits claims processing system built on AWS. Claude (configurable model) automatically adjudicates claims, detects fraud, verifies documents, and routes complex cases to human adjusters.
 
 **Live Demo**: `https://<YOUR_CLOUDFRONT_DOMAIN>.cloudfront.net`
 
@@ -27,9 +27,9 @@ An AI-powered life insurance death benefits claims processing system built on AW
 
 | Username | Password | Role | What They See |
 |----------|----------|------|---------------|
-| claimant1 | Test123! | Claimant | Submit claims, track status, AI chatbot |
-| adjuster1 | Test123! | Adjuster | Review claims, AI processing flow, approve/deny |
-| business1 | Test123! | Business | Dashboard metrics, cost analytics, token usage |
+| claimant1 | Test123!Pass | Claimant | Submit claims, track status, AI chatbot |
+| adjuster1 | Test123!Pass | Adjuster | Review claims, AI processing flow, approve/deny |
+| business1 | Test123!Pass | Business | Dashboard metrics, cost analytics, token usage |
 
 ---
 
@@ -42,7 +42,7 @@ After deployment, your environment values will be in `backend/infrastructure/out
 | Frontend | `https://<YOUR_CLOUDFRONT_DOMAIN>.cloudfront.net` |
 | API | `https://<YOUR_API_GATEWAY_ID>.execute-api.<YOUR_REGION>.amazonaws.com/prod/` |
 | Region | us-east-1 (default) |
-| AI Model | Claude Sonnet 4 (`us.anthropic.claude-sonnet-4-20250514-v1:0`) |
+| AI Model | Configurable via `scripts/select_model.py` (defaults to Claude Sonnet-class) |
 
 ---
 

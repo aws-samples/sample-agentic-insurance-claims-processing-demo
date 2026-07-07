@@ -14,9 +14,9 @@ This guide walks through each test scenario step by step, explaining what happen
    ```
 3. Frontend deployed at CloudFront URL from `outputs.json`
 4. Test users created:
-   - `claimant1` / `Test123!` — Claimant role
-   - `adjuster1` / `Test123!` — Adjuster role
-   - `business1` / `Test123!` — Business user role
+   - `claimant1` / `Test123!Pass` — Claimant role
+   - `adjuster1` / `Test123!Pass` — Adjuster role
+   - `business1` / `Test123!Pass` — Business user role
 
 ---
 
@@ -555,7 +555,7 @@ For a live demo, follow this sequence to show the full range of capabilities:
 1. Open the frontend URL in a browser
 2. Have three browser tabs ready (or use incognito for role switching)
 
-### Part 1: Claimant Portal (login as `claimant1` / `Test123!`)
+### Part 1: Claimant Portal (login as `claimant1` / `Test123!Pass`)
 1. **Note the AI Claims Assistant chatbot** — auto-opens after 1.5 seconds with empathetic greeting
 2. **Try the chatbot** — ask "What documents do I need?" or click a suggestion chip
 3. **Show the Demo Quick-Fill dropdown** — explain the 7 pre-configured scenarios
@@ -565,7 +565,7 @@ For a live demo, follow this sequence to show the full range of capabilities:
 7. **Submit Scenario 3** (Fraud) — show auto-denial with fraud indicators
 8. **Submit Scenario 4** (High-Value) — show escalation to manual review
 
-### Part 2: Adjuster Workbench (login as `adjuster1` / `Test123!`)
+### Part 2: Adjuster Workbench (login as `adjuster1` / `Test123!Pass`)
 1. **Show the Claims Queue** — escalated claims from scenarios 4, 5, 7 should appear with status badges
 2. **Click on an escalated claim** — show full details: policy number, beneficiary, relationship, date/cause of death
 3. **Highlight the AI Processing Flow sidebar** (right side) — show the 8-step multi-agent pipeline with completed/failed/pending status for each step, agent badges, and simulated MCP tool calls
@@ -573,7 +573,7 @@ For a live demo, follow this sequence to show the full range of capabilities:
 5. **Approve or deny the claim** — show one-click action, claim removed from queue
 6. **Note**: If a claim is still processing, the sidebar shows animated spinners and auto-updates every 3 seconds
 
-### Part 3: Business Dashboard (login as `business1` / `Test123!`)
+### Part 3: Business Dashboard (login as `business1` / `Test123!Pass`)
 1. **Show summary stats** — total claims, approved, denied, pending, escalated counts
 2. **Show Processing Performance** — average processing time, STP rate
 3. **Show AI Agent Activity** — invocation count, fraud detections

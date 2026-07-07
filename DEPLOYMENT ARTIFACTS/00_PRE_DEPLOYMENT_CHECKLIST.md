@@ -201,9 +201,9 @@ The deploy script creates these Cognito users automatically in Phase 5:
 
 | Username | Password | Cognito Group |
 |----------|----------|---------------|
-| claimant1 | Test123! | Claimants |
-| adjuster1 | Test123! | Adjusters |
-| business1 | Test123! | BusinessUsers |
+| claimant1 | Test123!Pass | Claimants |
+| adjuster1 | Test123!Pass | Adjusters |
+| business1 | Test123!Pass | BusinessUsers |
 
 ---
 

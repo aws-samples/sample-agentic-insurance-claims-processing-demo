@@ -151,7 +151,7 @@ Key fields stored per claim:
 
 - Email alias enabled (but usernames must be plain text, not email format)
 - 3 groups: `Claimants`, `Adjusters`, `BusinessUsers`
-- Test users: `claimant1`, `adjuster1`, `business1` (password: `Test123!`)
+- Test users: `claimant1`, `adjuster1`, `business1` (password: `Test123!Pass`)
 - Frontend uses AWS Amplify for token management (ID, Access, Refresh)
 - API Gateway uses Cognito authorizer to validate JWT tokens
 

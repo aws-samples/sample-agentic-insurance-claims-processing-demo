@@ -91,9 +91,9 @@ POST   /chat                    - FAQ chatbot
 
 | Username | Password | Role |
 |----------|----------|------|
-| `claimant1` | `Test123!` | Claimant (submit claims, chatbot) |
-| `adjuster1` | `Test123!` | Adjuster (review, approve/deny) |
-| `business1` | `Test123!` | Business (dashboard, metrics) |
+| `claimant1` | `Test123!Pass` | Claimant (submit claims, chatbot) |
+| `adjuster1` | `Test123!Pass` | Adjuster (review, approve/deny) |
+| `business1` | `Test123!Pass` | Business (dashboard, metrics) |
 
 ---
 

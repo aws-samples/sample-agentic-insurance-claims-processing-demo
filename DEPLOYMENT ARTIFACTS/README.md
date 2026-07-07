@@ -44,9 +44,9 @@ After deployment, your environment-specific values will be in `../backend/infras
 ### Test Users
 | Username | Password | Role |
 |----------|----------|------|
-| claimant1 | Test123! | Claimant |
-| adjuster1 | Test123! | Adjuster |
-| business1 | Test123! | Business |
+| claimant1 | Test123!Pass | Claimant |
+| adjuster1 | Test123!Pass | Adjuster |
+| business1 | Test123!Pass | Business |
 
 ---
 

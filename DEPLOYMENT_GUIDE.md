@@ -67,12 +67,12 @@ aws sts get-caller-identity
 2. Click "Model access" in left sidebar
 3. Click "Manage model access" button
 4. Enable these models:
-   - ✅ Claude Sonnet 4 (used for claim adjudication via cross-region inference)
+   - ✅ Claude Sonnet-class (configurable — selected during deployment via scripts/select_model.py)
    - ✅ Titan Embeddings G1 - Text (used for Knowledge Base embeddings)
 5. Click "Save changes"
 6. Wait for status to show "Access granted" (takes 1-2 minutes)
 
-**Note**: The system uses Claude Sonnet 4 via cross-region inference profile (`us.anthropic.claude-sonnet-4-20250514-v1:0`). Ensure your account has access to Anthropic models in the Bedrock console.
+**Note**: The system uses cross-region inference profiles. Run `scripts/select_model.py` during deployment to scan available models and select an ACTIVE one. LEGACY models are flagged.
 
 ---
 
@@ -262,9 +262,9 @@ Test users were already created during infrastructure deployment (Cognito):
 
 | Username | Password | Role |
 |----------|----------|------|
-| claimant1 | Test123! | Claimant |
-| adjuster1 | Test123! | Adjuster |
-| business1 | Test123! | Business |
+| claimant1 | Test123!Pass | Claimant |
+| adjuster1 | Test123!Pass | Adjuster |
+| business1 | Test123!Pass | Business |
 
 ---
 
@@ -297,7 +297,7 @@ Expected: 2 tables listed
 ### 4. Test Frontend
 
 1. Open the frontend URL in your browser
-2. Login with: `claimant1` / `Test123!`
+2. Login with: `claimant1` / `Test123!Pass`
 3. Submit a test claim
 4. Upload a document
 5. Verify claim processes
@@ -306,17 +306,17 @@ Expected: 2 tables listed
 
 **Claimant Portal**:
 - Username: `claimant1`
-- Password: `Test123!`
+- Password: `Test123!Pass`
 - Can: Submit claims, upload documents, track status
 
 **Adjuster Workbench**:
 - Username: `adjuster1`
-- Password: `Test123!`
+- Password: `Test123!Pass`
 - Can: Review claims, view AI insights, approve/deny
 
 **Business Dashboard**:
 - Username: `business1`
-- Password: `Test123!`
+- Password: `Test123!Pass`
 - Can: View metrics, claims breakdown, performance
 
 ---
@@ -841,9 +841,9 @@ Use this to track your progress:
 
 | Username | Password | Role |
 |----------|----------|------|
-| claimant1 | Test123! | Claimant |
-| adjuster1 | Test123! | Adjuster |
-| business1 | Test123! | Business |
+| claimant1 | Test123!Pass | Claimant |
+| adjuster1 | Test123!Pass | Adjuster |
+| business1 | Test123!Pass | Business |
 
 ### Stack Names
 

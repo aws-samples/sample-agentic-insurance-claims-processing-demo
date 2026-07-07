@@ -175,9 +175,9 @@ python3 create_test_users.py
 ```
 
 **Test Users**:
-- `claimant1` / `Test123!` → Claimants group
-- `adjuster1` / `Test123!` → Adjusters group
-- `business1` / `Test123!` → BusinessUsers group
+- `claimant1` / `Test123!Pass` → Claimants group
+- `adjuster1` / `Test123!Pass` → Adjusters group
+- `business1` / `Test123!Pass` → BusinessUsers group
 
 ### Step 6.2: Load Test Scenarios
 

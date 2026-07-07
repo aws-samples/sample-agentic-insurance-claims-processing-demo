@@ -83,9 +83,9 @@ aws cloudfront create-invalidation --distribution-id DIST_ID --paths "/*"
 ### Phase 6: Test Data
 
 Create test users in Cognito:
-- `claimant1` / `Test123!` → Claimants group
-- `adjuster1` / `Test123!` → Adjusters group
-- `business1` / `Test123!` → BusinessUsers group
+- `claimant1` / `Test123!Pass` → Claimants group
+- `adjuster1` / `Test123!Pass` → Adjusters group
+- `business1` / `Test123!Pass` → BusinessUsers group
 
 Load test scenarios:
 ```bash

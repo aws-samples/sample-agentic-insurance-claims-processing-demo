@@ -196,21 +196,21 @@ The initial approach used Direct Code Deploy (S3-based), but AgentCore cold star
 
 ### Three Role-Based Portals
 
-**Claimant Portal** (`claimant1` / `Test123!`)
+**Claimant Portal** (`claimant1` / `Test123!Pass`)
 - Submit claims with multi-file document upload
 - Demo Quick-Fill dropdown (9 pre-configured scenarios)
 - Track claim status in real-time
 - View AI decision reasoning and document verification findings
 - AI Claims Assistant chatbot (auto-opens after 1.5s, empathetic FAQ guidance)
 
-**Adjuster Workbench** (`adjuster1` / `Test123!`)
+**Adjuster Workbench** (`adjuster1` / `Test123!Pass`)
 - Review queue with escalated/submitted/processing claims
 - Full claim details with AI Insights panel
 - AI Processing Flow sidebar — 8-step multi-agent pipeline visualization
 - One-click approve/deny actions
 - Auto-polls every 3 seconds while claims are processing
 
-**Business Dashboard** (`business1` / `Test123!`)
+**Business Dashboard** (`business1` / `Test123!Pass`)
 - Tabbed interface with 4 views: Overview (executive KPIs, status donut chart, claims table), Operations (real-time with 10s auto-refresh, live claims feed, pipeline visualization), Analytics (decision distribution, claims by amount, fraud breakdown), Cost & AI (cost comparison, complexity tiers, token usage, ROI)
 
 ### Tech Stack

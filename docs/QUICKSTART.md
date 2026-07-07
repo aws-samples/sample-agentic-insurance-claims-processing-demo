@@ -9,7 +9,7 @@ Get the system running in under 60 minutes.
 - [ ] Node.js 18+ and npm
 - [ ] Python 3.11+
 - [ ] AWS CDK CLI: `npm install -g aws-cdk`
-- [ ] Bedrock model access enabled (Claude Sonnet 4, Titan Embeddings)
+- [ ] Bedrock model access enabled (Claude Sonnet-class or newer, Titan Embeddings)
 
 ---
 
@@ -71,9 +71,9 @@ aws cloudfront create-invalidation --distribution-id DIST_ID --paths "/*"
 ### Step 5: Create Test Users
 
 Create these users in Cognito (plain usernames, not email format):
-- `claimant1` / `Test123!` → Claimants group
-- `adjuster1` / `Test123!` → Adjusters group
-- `business1` / `Test123!` → BusinessUsers group
+- `claimant1` / `Test123!Pass` → Claimants group
+- `adjuster1` / `Test123!Pass` → Adjusters group
+- `business1` / `Test123!Pass` → BusinessUsers group
 
 ### Step 6: Load Test Data
 
@@ -88,7 +88,7 @@ python3 load_test_data.py
 ## Verify
 
 1. Open the CloudFront URL in your browser
-2. Login as `claimant1` / `Test123!`
+2. Login as `claimant1` / `Test123!Pass`
 3. Use the Demo Quick-Fill dropdown to select Scenario 1 (Clean Claim)
 4. Submit the claim — should auto-approve in 2–5 seconds
 5. Login as `adjuster1` — check the Adjuster Workbench
@@ -118,7 +118,7 @@ See [DEMO_TESTING_GUIDE.md](DEMO_TESTING_GUIDE.md) for detailed walkthroughs.
 |-------|-----|
 | CDK deploy fails | Check `aws sts get-caller-identity`, verify Bedrock model access |
 | Frontend not loading | Check CloudFront distribution, run S3 sync + invalidation |
-| Claims stuck in Processing | Check Lambda logs, verify Bedrock model access for Claude Sonnet 4 |
+| Claims stuck in Processing | Check Lambda logs, verify Bedrock model access for your selected model |
 | Login fails | Verify Cognito user pool ID and client ID in `.env` |
 | AI returns wrong decisions | Check `POLICY_DATABASE` in `claims_handler.py` for the policy number |
 
