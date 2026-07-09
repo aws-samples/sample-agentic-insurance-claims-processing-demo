@@ -1,19 +1,22 @@
-# CCOE Insurance Industry LLC - Death Benefits Claims Processing System
+# Insurance Claims Processing — Agentic AI Solution
 
-> AI-powered claims processing system using Amazon Bedrock, AgentCore, and React — featuring automated claim adjudication with Amazon Bedrock.
+> An end-to-end agentic AI system that processes life insurance death benefits claims in minutes instead of weeks. Six specialist AI agents on Amazon Bedrock AgentCore perform identity verification, document extraction, policy validation, fraud detection, and adjudication — delivering approve/deny/escalate decisions with empathetic, auditable reasoning.
 
 [![AWS](https://img.shields.io/badge/AWS-Bedrock-orange)](https://aws.amazon.com/bedrock/)
 [![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue)](https://www.typescriptlang.org/)
 
-## Overview
+## What It Does
 
-A complete demonstration of an AI-powered life insurance death benefits claims processing system featuring:
-
-- **AI Claim Adjudication** — AI (Claude Sonnet-class, configurable) analyzes claims against policy data and makes approve/deny/escalate decisions
-- **Empathetic Communication** — AI responses are written with compassion for bereaved families, with heightened sensitivity for military/combat losses
-- **Multi-Agent Architecture** — Supervisor + 5 specialist agents deployed on Bedrock AgentCore (ECR-based, ARM64 containers via CodeBuild)
+- **Orchestrates 6 AI agents** in a 4-phase parallel pipeline (Authenticate + Extract, Policy Verify + Fraud Detect, Adjudicate, Synthesize) to process claims from submission to decision
+- **Makes structured decisions** (approve, deny, escalate) with transparent reasoning, confidence scores, and fraud risk assessment — grounded in policy data and uploaded documents
+- **Communicates with empathy** — AI responses acknowledge bereavement, with heightened sensitivity for military/combat losses and referrals to SGLI/VA benefits
+- **Enforces compliance** via Amazon Bedrock Guardrails (content filtering, PII anonymization, prompt attack detection) and application-layer input validation
+- **Provides three role-based portals** — Claimant submission + chatbot, Adjuster review workbench with 8-step AI flow visualization, Business analytics dashboard
+- **Supports 9 pre-configured test scenarios** covering auto-approve, auto-deny (lapsed policy, fraud, exclusions), and human escalation paths
+- **Event-driven processing** via Amazon EventBridge with Dead Letter Queue, retry logic, and claim resubmission workflow
+- **One-click deployment** — Automated `deploy.sh` handles CDK infrastructure, Docker agent builds, Knowledge Base setup, and frontend deployment
 - **Three User Portals** — Claimant submission, Adjuster review workbench, Business analytics dashboard
 - **AI Claims Assistant Chatbot** — Empathetic FAQ chatbot for claimants (auto-opens, powered by Amazon Bedrock)
 - **AI Processing Flow Visualization** — 8-step multi-agent pipeline sidebar in Adjuster Workbench with real-time status
