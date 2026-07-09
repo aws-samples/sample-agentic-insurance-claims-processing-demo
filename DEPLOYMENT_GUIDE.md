@@ -757,7 +757,7 @@ Use this to track your progress:
 - **Fixed**: Claims Lambda CORS headers, Decimal serialization, DynamoDB composite key queries
 - **Fixed**: Login "Signing in..." stuck state, added `checkAuth()` on startup
 - **Added**: Role-based access control with `RoleGuard` component
-- **Architecture**: Claim processing uses direct Bedrock InvokeModel from Lambda (async self-invoke) instead of AgentCore runtime invocation for reliability
+- **Architecture**: Claim processing uses EventBridge-triggered Lambda → AgentCore Supervisor (6-agent pipeline) as the primary path. Direct Bedrock InvokeModel is retained only as a fallback if AgentCore is unavailable
 
 ### Version 1.0.12 (March 5, 2026)
 - **Changed**: Agent stack rewritten from ECR/CodeBuild container approach to Direct Code Deploy (S3-based)

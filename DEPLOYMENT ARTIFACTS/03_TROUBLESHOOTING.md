@@ -692,7 +692,7 @@ def _get_claim_item(claim_id):
 1. Pre-packaging dependencies into `*_package` directories (89MB each) — AgentCore returned `HandlerInternalFailure` (too large or wrong format)
 2. Reducing dependencies — still too slow for cold start
 
-**Final Solution**: Bypass AgentCore for actual claim processing. Lambda calls Bedrock `InvokeModel` directly using Claude Sonnet 4. AgentCore runtimes remain deployed for the architecture story but are not invoked for claim processing.
+**Interim Solution (since superseded)**: During initial deployment, AgentCore was bypassed temporarily. Lambda called Bedrock InvokeModel directly while AgentCore cold-start issues were resolved. **Current state**: AgentCore Supervisor is the primary processing path. Direct Bedrock InvokeModel is retained only as a fallback. See Lesson 32 for the resolution.
 
 **Architecture Decision**: Lambda self-invokes with `InvocationType='Event'` for async processing (API Gateway has 29s hard limit). The async invocation marks the claim as "processing", calls Bedrock, parses the AI response, and updates DynamoDB with the decision.
 
