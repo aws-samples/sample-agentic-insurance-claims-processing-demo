@@ -107,10 +107,13 @@ export class ApiStack extends cdk.Stack {
       resources: [props.supervisorRuntimeArn, `${props.supervisorRuntimeArn}/*`],
     }));
 
-    // Bedrock direct invoke (fallback path + chat)
+    // Bedrock direct invoke (fallback path + chat) — scoped to Anthropic models
     apiLambdaRole.addToPolicy(new iam.PolicyStatement({
       actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
-      resources: ['*'],
+      resources: [
+        `arn:aws:bedrock:${cdk.Aws.REGION}::foundation-model/anthropic.*`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:inference-profile/us.anthropic.*`,
+      ],
     }));
 
     // ================================================================

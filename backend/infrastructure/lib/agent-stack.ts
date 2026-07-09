@@ -93,9 +93,27 @@ export class AgentStack extends cdk.Stack {
       managedPolicies: [iam.ManagedPolicy.fromAwsManagedPolicyName('BedrockAgentCoreFullAccess')],
     });
 
+    // Bedrock model invocation — scoped to Anthropic models (foundation + inference profiles)
     specialistRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream', 'bedrock:Retrieve', 'bedrock:RetrieveAndGenerate', 'bedrock:ApplyGuardrail'],
-      resources: ['*'],
+      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+      resources: [
+        `arn:aws:bedrock:${cdk.Aws.REGION}::foundation-model/anthropic.*`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:inference-profile/us.anthropic.*`,
+      ],
+    }));
+    // Knowledge Base retrieval — scoped to specific KBs
+    specialistRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:Retrieve', 'bedrock:RetrieveAndGenerate'],
+      resources: [
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.policy.attrKnowledgeBaseId}`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.fraud.attrKnowledgeBaseId}`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.regulatory.attrKnowledgeBaseId}`,
+      ],
+    }));
+    // Guardrail — scoped to specific guardrail
+    specialistRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:ApplyGuardrail'],
+      resources: [`arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:guardrail/${props.guardrailId}`],
     }));
     props.claimsTable.grantReadWriteData(specialistRole);
     props.documentsBucket.grantReadWrite(specialistRole);
@@ -133,8 +151,23 @@ export class AgentStack extends cdk.Stack {
     });
 
     supervisorRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream', 'bedrock:Retrieve', 'bedrock:RetrieveAndGenerate', 'bedrock:ApplyGuardrail'],
-      resources: ['*'],
+      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+      resources: [
+        `arn:aws:bedrock:${cdk.Aws.REGION}::foundation-model/anthropic.*`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:inference-profile/us.anthropic.*`,
+      ],
+    }));
+    supervisorRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:Retrieve', 'bedrock:RetrieveAndGenerate'],
+      resources: [
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.policy.attrKnowledgeBaseId}`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.fraud.attrKnowledgeBaseId}`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:knowledge-base/${props.knowledgeBases.regulatory.attrKnowledgeBaseId}`,
+      ],
+    }));
+    supervisorRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:ApplyGuardrail'],
+      resources: [`arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:guardrail/${props.guardrailId}`],
     }));
     props.claimsTable.grantReadWriteData(supervisorRole);
     props.documentsBucket.grantReadWrite(supervisorRole);
