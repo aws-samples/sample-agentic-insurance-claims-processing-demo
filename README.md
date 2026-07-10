@@ -1,5 +1,7 @@
 # Insurance Claims Processing — Agentic AI Solution
 
+[![Built with Kiro](https://img.shields.io/badge/Built_with-Kiro-6236FF?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzcuNTggMiA0IDUuNTggNCAxMHY4LjVjMCAuODMuNjcgMS41IDEuNSAxLjVzMS4wOC0uMzkgMS4zNS0uODVjLjI3LS40Ni43Ny0uNjUgMS4xNS0uNjVzLjg4LjE5IDEuMTUuNjVjLjI3LjQ2Ljc3Ljg1IDEuMzUuODVzMS4wOC0uMzkgMS4zNS0uODVjLjI3LS40Ni43Ny0uNjUgMS4xNS0uNjVzLjg4LjE5IDEuMTUuNjVjLjI3LjQ2Ljc3Ljg1IDEuMzUuODVzMS4wOC0uMzkgMS4zNS0uODVjLjI3LS40Ni43Ny0uNjUgMS4xNS0uNjVzLjg4LjE5IDEuMTUuNjVjLjI3LjQ2Ljc3Ljg1IDEuMzUuODVzMS41LS42NyAxLjUtMS41VjEwYzAtNC40Mi0zLjU4LTgtOC04em0tMyA5YTEuNSAxLjUgMCAxMTAtMyAxLjUgMS41IDAgMDEwIDN6bTYgMGExLjUgMS41IDAgMTEwLTMgMS41IDEuNSAwIDAxMCAzeiIvPjwvc3ZnPg==)](https://kiro.dev)
+
 > An end-to-end agentic AI system that processes life insurance death benefits claims in minutes instead of weeks. Six specialist AI agents on Amazon Bedrock AgentCore perform identity verification, document extraction, policy validation, fraud detection, and adjudication — delivering approve/deny/escalate decisions with empathetic, auditable reasoning.
 
 [![AWS](https://img.shields.io/badge/AWS-Bedrock-orange)](https://aws.amazon.com/bedrock/)
