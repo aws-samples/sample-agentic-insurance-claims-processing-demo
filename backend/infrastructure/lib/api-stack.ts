@@ -88,32 +88,68 @@ export class ApiStack extends cdk.Stack {
     this.api.deploymentStage.node.addDependency(apiGwAccount);
 
     // ================================================================
-    // Lambda execution role
+    // Per-function IAM roles (least privilege)
     // ================================================================
-    const apiLambdaRole = new iam.Role(this, 'ApiLambdaRole', {
+    const baseLambdaPolicy = iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole');
+
+    // Claims Handler: DynamoDB (claims) RW, S3 RW, EventBridge PutEvents
+    const claimsRole = new iam.Role(this, 'ClaimsHandlerRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-      ],
+      managedPolicies: [baseLambdaPolicy],
     });
+    props.claimsTable.grantReadWriteData(claimsRole);
+    props.documentsBucket.grantReadWrite(claimsRole);
 
-    props.claimsTable.grantReadWriteData(apiLambdaRole);
-    props.metricsTable.grantReadWriteData(apiLambdaRole);
-    props.documentsBucket.grantReadWrite(apiLambdaRole);
-
-    // AgentCore invoke permission
-    apiLambdaRole.addToPolicy(new iam.PolicyStatement({
+    // Process Claim Handler: DynamoDB (claims) RW, S3 RW, AgentCore Invoke, Bedrock Invoke, EventBridge PutEvents
+    const processClaimRole = new iam.Role(this, 'ProcessClaimHandlerRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [baseLambdaPolicy],
+    });
+    props.claimsTable.grantReadWriteData(processClaimRole);
+    props.documentsBucket.grantReadWrite(processClaimRole);
+    processClaimRole.addToPolicy(new iam.PolicyStatement({
       actions: ['bedrock-agentcore:InvokeAgentRuntime'],
       resources: [props.supervisorRuntimeArn, `${props.supervisorRuntimeArn}/*`],
     }));
-
-    // Bedrock direct invoke (fallback path + chat) — scoped to Anthropic models
-    apiLambdaRole.addToPolicy(new iam.PolicyStatement({
+    processClaimRole.addToPolicy(new iam.PolicyStatement({
       actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
       resources: [
-        `arn:aws:bedrock:${cdk.Aws.REGION}::foundation-model/anthropic.*`,
+        `arn:aws:bedrock:*::foundation-model/anthropic.*`,
         `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:inference-profile/us.anthropic.*`,
       ],
+    }));
+
+    // Documents Handler: S3 RW, DynamoDB (claims) RW
+    const documentsRole = new iam.Role(this, 'DocumentsHandlerRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [baseLambdaPolicy],
+    });
+    props.documentsBucket.grantReadWrite(documentsRole);
+    props.claimsTable.grantReadWriteData(documentsRole);
+
+    // Metrics Handler: DynamoDB (claims) Read, DynamoDB (metrics) RW
+    const metricsRole = new iam.Role(this, 'MetricsHandlerRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [baseLambdaPolicy],
+    });
+    props.claimsTable.grantReadData(metricsRole);
+    props.metricsTable.grantReadWriteData(metricsRole);
+
+    // Chat Handler: Bedrock Invoke + ApplyGuardrail only
+    const chatRole = new iam.Role(this, 'ChatHandlerRole', {
+      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      managedPolicies: [baseLambdaPolicy],
+    });
+    chatRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+      resources: [
+        `arn:aws:bedrock:*::foundation-model/anthropic.*`,
+        `arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:inference-profile/us.anthropic.*`,
+      ],
+    }));
+    chatRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:ApplyGuardrail'],
+      resources: [`arn:aws:bedrock:${cdk.Aws.REGION}:${cdk.Aws.ACCOUNT_ID}:guardrail/${props.guardrailId || '*'}`],
     }));
 
     // ================================================================
@@ -130,8 +166,9 @@ export class ApiStack extends cdk.Stack {
       encryption: sqs.QueueEncryption.SQS_MANAGED,
     });
 
-    // Grant claims handler permission to put events
-    eventBus.grantPutEventsTo(apiLambdaRole);
+    // Grant claims and processClaimHandler permission to put events
+    eventBus.grantPutEventsTo(claimsRole);
+    eventBus.grantPutEventsTo(processClaimRole);
 
     // ================================================================
     // Lambda functions
@@ -143,7 +180,7 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'process_claim_handler.handler',
       code: lambda.Code.fromAsset('../lambda/claims'),
-      role: apiLambdaRole,
+      role: processClaimRole,
       timeout: cdk.Duration.minutes(15),
       memorySize: 256,
       environment: {
@@ -193,7 +230,7 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'claims_handler.handler',
       code: lambda.Code.fromAsset('../lambda/claims'),
-      role: apiLambdaRole,
+      role: claimsRole,
       timeout: cdk.Duration.minutes(15),
       memorySize: 256,
       environment: {
@@ -212,7 +249,7 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'documents_handler.handler',
       code: lambda.Code.fromAsset('../lambda/documents'),
-      role: apiLambdaRole,
+      role: documentsRole,
       timeout: cdk.Duration.seconds(60),
       environment: {
         DOCUMENTS_BUCKET: props.documentsBucket.bucketName,
@@ -227,7 +264,7 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'metrics_handler.handler',
       code: lambda.Code.fromAsset('../lambda/metrics'),
-      role: apiLambdaRole,
+      role: metricsRole,
       timeout: cdk.Duration.seconds(30),
       environment: {
         CLAIMS_TABLE: props.claimsTable.tableName,
@@ -242,7 +279,7 @@ export class ApiStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_11,
       handler: 'chat_handler.handler',
       code: lambda.Code.fromAsset('../lambda/chat'),
-      role: apiLambdaRole,
+      role: chatRole,
       timeout: cdk.Duration.seconds(30),
       memorySize: 128,
       environment: {

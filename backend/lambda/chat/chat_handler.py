@@ -9,6 +9,7 @@ import boto3
 bedrock_runtime = boto3.client('bedrock-runtime', region_name=os.environ.get('AWS_REGION', 'us-east-1'))
 
 MODEL_ID = os.environ.get('MODEL_ID', 'us.anthropic.claude-sonnet-4-20250514-v1:0')
+GUARDRAIL_ID = os.environ.get('GUARDRAIL_ID', '')
 
 ALLOWED_ORIGIN = os.environ.get('ALLOWED_ORIGIN', '*')
 
@@ -91,6 +92,34 @@ def handler(event, context):
                 'content': h.get('content', ''),
             })
         messages.append({'role': 'user', 'content': message})
+
+        # Apply Bedrock Guardrail to user input (blocks prompt injection attacks)
+        if GUARDRAIL_ID:
+            try:
+                guardrail_response = bedrock_runtime.apply_guardrail(
+                    guardrailIdentifier=GUARDRAIL_ID,
+                    guardrailVersion='DRAFT',
+                    source='INPUT',
+                    content=[{'text': {'text': message}}],
+                )
+                if guardrail_response.get('action') == 'GUARDRAIL_INTERVENED':
+                    # Check if it was a prompt attack (block) vs topic/PII filter (allow for chat)
+                    assessments = guardrail_response.get('assessments', [])
+                    is_prompt_attack = False
+                    for assessment in assessments:
+                        content_policy = assessment.get('contentPolicy', {})
+                        for filter_result in content_policy.get('filters', []):
+                            if filter_result.get('type') == 'PROMPT_ATTACK' and filter_result.get('action') == 'BLOCKED':
+                                is_prompt_attack = True
+                        word_policy = assessment.get('wordPolicy', {})
+                        if word_policy.get('customWords') or word_policy.get('managedWordLists'):
+                            is_prompt_attack = True
+                    if is_prompt_attack:
+                        return response(400, {
+                            'reply': 'I cannot process that request. Please rephrase your question about claims processing.'
+                        })
+            except Exception as guardrail_err:
+                print(f"Guardrail check failed (non-blocking): {guardrail_err}")
 
         resp = bedrock_runtime.invoke_model(
             modelId=MODEL_ID,

@@ -259,6 +259,10 @@ export class InfrastructureStack extends cdk.Stack {
       }),
     });
 
+    // OpenSearch network policy — configurable access (default: restricted/VPC-only for production)
+    // Use --context opensearch_public_access=true for demo/dev environments
+    const opensearchPublicAccess = this.node.tryGetContext('opensearch_public_access') === 'true';
+
     const networkPolicy = new opensearchserverless.CfnSecurityPolicy(this, 'NetworkPolicy', {
       name: `${collectionName}-network`,
       type: 'network',
@@ -267,7 +271,7 @@ export class InfrastructureStack extends cdk.Stack {
           { ResourceType: 'collection', Resource: [`collection/${collectionName}`] },
           { ResourceType: 'dashboard', Resource: [`collection/${collectionName}`] },
         ],
-        AllowFromPublic: true,
+        AllowFromPublic: opensearchPublicAccess,
       }]),
     });
 
