@@ -1,0 +1,84 @@
+# Dependencies
+node_modules/
+venv/
+.venv/
+*_package/
+
+# Build outputs
+frontend/dist/
+backend/infrastructure/cdk.out/
+dist/
+build/
+
+# CDK deployment outputs (contains account-specific resource IDs)
+backend/infrastructure/outputs.json
+backend/infrastructure/model-config.json
+
+# Environment files (contain deployment-specific config)
+.env
+.env.local
+.env.*.local
+frontend/.env
+*.tfvars
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.kiro/
+
+# Generated diagrams
+generated-diagrams/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.egg
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+
+# Logs
+*.log
+
+# Secrets (never commit)
+*.pem
+*.key
+credentials
+
+# Generated PDF documents (created by scripts/generate_demo_documents.py)
+test-data/documents/pdf/
+
+# Binary build artifacts (regenerated during deployment)
+backend/agents/layers/*.zip
+test-data/documents/*.zip
+
+# Internal review documents (not for public repo)
+docs/WELL_ARCHITECTED_REVIEW.md
+docs/APPSEC_SCAN_REPORT.md
+docs/SECURITY_SCAN_FINDINGS.md
+docs/CONSOLIDATED_SECURITY_CLEARANCE_REPORT.md
+docs/CONSOLIDATED_SECURITY_CLEARANCE_REPORT.xlsx
+docs/architecture-diagram.drawio
+docs/architecture-diagram.html
+docs/ccoe-insurance-aws-reference-architecture.png
+docs/END_TO_END_CLAIMS_PROCESS.md
+
+# Internal comparison and security clearance reports (not for public repos)
+docs/GUIDANCE_PAPER_COMPARISON.docx
+docs/CONSOLIDATED_SECURITY_CLEARANCE_REPORT.md
+docs/CONSOLIDATED_SECURITY_CLEARANCE_REPORT.xlsx
+
+# Internal planning documents (not for public repos)
+docs/LEX_CONNECT_INTEGRATION_EFFORT.md
+docs/QUICKSIGHT_INTEGRATION_EFFORT.md
+docs/ROADMAP.md
+docs/WELL_ARCHITECTED_REVIEW.md

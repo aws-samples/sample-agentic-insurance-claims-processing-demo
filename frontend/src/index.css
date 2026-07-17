@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e8f4f8 50%, #f0f4ff 100%);
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white px-5 py-2.5 rounded-lg 
+           hover:from-primary-700 hover:to-primary-800 transition-all duration-200 
+           shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 px-5 py-2.5 rounded-lg border border-gray-300
+           hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 
+           shadow-sm disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+  }
+
+  .btn-danger {
+    @apply bg-gradient-to-r from-red-600 to-red-700 text-white px-5 py-2.5 rounded-lg 
+           hover:from-red-700 hover:to-red-800 transition-all duration-200 
+           shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+  }
+
+  .btn-success {
+    @apply bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-2.5 rounded-lg 
+           hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 
+           shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+           hover:shadow-md transition-shadow duration-200;
+  }
+
+  .card-flat {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg bg-white
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           placeholder-gray-400 transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-gray-700 mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wide;
+  }
+
+  .badge-success {
+    @apply badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200;
+  }
+
+  .badge-warning {
+    @apply badge bg-amber-50 text-amber-700 ring-1 ring-amber-200;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-50 text-red-700 ring-1 ring-red-200;
+  }
+
+  .badge-info {
+    @apply badge bg-primary-50 text-primary-700 ring-1 ring-primary-200;
+  }
+
+  .stat-card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6 
+           hover:shadow-md transition-all duration-200 hover:-translate-y-0.5;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-gray-900 tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-gray-500 mt-1;
+  }
+}

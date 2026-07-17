@@ -1,0 +1,51 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2018-054891
+POLICY TYPE:           Term Life Insurance (20 Year)
+STATUS:                *** LAPSED - NOT IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Thomas Edward Parker
+Date of Birth:         November 8, 1965
+Address:               88 Elm Street, Apt 4B
+                       Boston, MA 02118
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        March 15, 2018
+Face Amount:           $200,000.00
+Premium:               $320.00/month
+Premium Status:        *** DELINQUENT ***
+
+----------------------------------------------------
+LAPSE INFORMATION
+----------------------------------------------------
+Last Premium Paid:     July 1, 2025
+Grace Period Ended:    August 31, 2025
+Policy Lapsed:         September 1, 2025
+Reinstatement Eligible: NO (> 6 months lapsed)
+
+NOTICE: Three (3) premium due notices were mailed:
+  - August 5, 2025 (First Notice)
+  - August 20, 2025 (Second Notice)
+  - September 10, 2025 (Final Notice - Lapse)
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Jennifer Parker (Ex-Spouse)
+                       100% of death benefit
+
+NOTE: Beneficiary designation was not updated
+after divorce finalized on April 12, 2024.
+
+====================================================
+POLICY IS NOT IN FORCE AS OF DATE OF DEATH
+NO DEATH BENEFIT IS PAYABLE
+====================================================

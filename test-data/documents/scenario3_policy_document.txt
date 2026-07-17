@@ -1,0 +1,57 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2025-112847
+POLICY TYPE:           Term Life Insurance (10 Year)
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Victor Alejandro Reyes
+Date of Birth:         April 3, 1972
+Address:               1920 Palm Beach Blvd
+                       Fort Myers, FL 33901
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        December 1, 2025
+Face Amount:           $500,000.00
+Death Benefit:         $500,000.00
+Premium:               $890.00/month
+Premium Status:        Current
+
+*** FRAUD ALERT FLAGS ***
+- Policy purchased only 83 days before death
+- Coverage amount significantly increased from
+  previous $50,000 policy (LIP-2020-067123)
+- Beneficiary changed 45 days before death
+- Application medical exam showed no health issues
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Maria Elena Reyes (Spouse)
+                       100% of death benefit
+
+CHANGE HISTORY:
+- Original (Dec 2025): Carlos Reyes (Brother)
+- Changed (Jan 8, 2026): Maria Elena Reyes (Spouse)
+
+----------------------------------------------------
+CONTESTABILITY
+----------------------------------------------------
+Within 2-year contestability period: YES
+Policy age at death: 83 days
+
+----------------------------------------------------
+PREVIOUS POLICY HISTORY
+----------------------------------------------------
+LIP-2020-067123: $50,000 Term Life (Active 2020-2025)
+  - Cancelled November 15, 2025
+  - Replaced by current policy 16 days later
+
+====================================================

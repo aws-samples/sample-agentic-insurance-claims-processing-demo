@@ -1,0 +1,80 @@
+====================================================
+     MEMORIAL SLOAN KETTERING CANCER CENTER
+     MEDICAL RECORDS - DISCHARGE SUMMARY (DECEASED)
+====================================================
+
+PATIENT:               Elizabeth Grace Thornton
+MRN:                   MSK-2025-129847
+DOB:                   01/28/1955
+ADMISSION DATE:        02/01/2026
+DISCHARGE DATE:        02/08/2026 (Deceased)
+ATTENDING PHYSICIAN:   Dr. Amanda Liu, MD, Oncology
+
+----------------------------------------------------
+CHIEF COMPLAINT
+----------------------------------------------------
+71-year-old female admitted for management of
+progressive metastatic pancreatic cancer with
+worsening hepatic failure and declining performance
+status.
+
+----------------------------------------------------
+HISTORY OF PRESENT ILLNESS
+----------------------------------------------------
+Patient was diagnosed with pancreatic adenocarcinoma
+(Stage IIB) in August 2025. Underwent Whipple
+procedure September 2025 followed by adjuvant
+chemotherapy (gemcitabine/nab-paclitaxel). Disease
+progressed despite treatment. CT scan January 2026
+showed extensive hepatic metastases. Patient elected
+to transition to comfort care.
+
+----------------------------------------------------
+PAST MEDICAL HISTORY
+----------------------------------------------------
+- Pancreatic adenocarcinoma (diagnosed August 2025)
+- Post-Whipple procedure (September 2025)
+- Hypertension (well-controlled)
+- Osteoporosis
+- No prior cancer history
+- Non-smoker, occasional wine
+
+----------------------------------------------------
+HOSPITAL COURSE
+----------------------------------------------------
+Patient admitted February 1 with increasing jaundice,
+abdominal pain, and confusion. Labs showed markedly
+elevated bilirubin (18.2), AST/ALT elevated, INR 2.8.
+Imaging confirmed progressive hepatic metastases with
+biliary obstruction. Palliative care team consulted.
+Family meeting held February 3 — patient and family
+elected comfort measures only. Patient remained
+comfortable on pain management protocol. Gradually
+declined over following days. Passed peacefully
+surrounded by family on February 8, 2026 at 22:10.
+
+TIME OF DEATH: 22:10 EST
+
+----------------------------------------------------
+FINAL DIAGNOSIS
+----------------------------------------------------
+1. Metastatic pancreatic adenocarcinoma
+2. Hepatic failure secondary to liver metastases
+3. Biliary obstruction
+4. Hypertension
+5. Osteoporosis
+
+----------------------------------------------------
+CAUSE OF DEATH
+----------------------------------------------------
+Immediate:    Metastatic Pancreatic Cancer
+Due to:       Pancreatic Adenocarcinoma
+Contributing: Hepatic Failure
+
+Manner of Death: Natural
+
+====================================================
+Electronically signed: Dr. Amanda Liu, MD
+Date: 02/09/2026
+Memorial Sloan Kettering Cancer Center, NY 10065
+====================================================

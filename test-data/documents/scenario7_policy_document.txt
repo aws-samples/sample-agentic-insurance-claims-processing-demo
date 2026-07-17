@@ -1,0 +1,68 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2023-065478
+POLICY TYPE:           Whole Life Insurance
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  William Henry Foster
+Date of Birth:         December 5, 1960
+Address:               789 Longhorn Lane
+                       Temple, TX 76502
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        January 15, 2023
+Face Amount:           $150,000.00
+Death Benefit:         $150,000.00
+Premium:               $620.00/month
+Premium Status:        Current (paid through March 2026)
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Linda Foster (Spouse)
+                       50% of death benefit
+Secondary:             Mark Foster (Son)
+                       50% of death benefit
+
+CHANGE HISTORY:
+- Original (Jan 2023): Linda Foster 100%
+- Changed (Nov 2025): Split 50/50 Linda & Mark Foster
+
+----------------------------------------------------
+CONTESTABILITY
+----------------------------------------------------
+Within 2-year contestability: YES (policy 3+ years)
+Contestability expired: January 15, 2025
+
+----------------------------------------------------
+APPLICATION MEDICAL HISTORY
+----------------------------------------------------
+At time of application (December 2022):
+- Disclosed: Mild hypertension (controlled)
+- NOT Disclosed: COPD diagnosis (October 2022)
+- NOT Disclosed: CHF diagnosis (November 2022)
+- Medical exam: Passed with elevated BP noted
+
+*** POTENTIAL MATERIAL MISREPRESENTATION ***
+COPD and CHF were diagnosed BEFORE application
+but were not disclosed. However, contestability
+period has expired, limiting company's ability
+to rescind the policy.
+
+----------------------------------------------------
+CLAIM NOTES
+----------------------------------------------------
+- Beneficiary change 3 months before death
+- Pre-existing conditions not disclosed at application
+- Contestability expired — cannot rescind
+- Moderate risk indicators warrant human review
+
+====================================================

@@ -1,0 +1,73 @@
+====================================================
+     BOSTON MEDICAL CENTER - MEDICAL RECORDS
+     DISCHARGE SUMMARY (DECEASED)
+====================================================
+
+PATIENT:               Thomas Edward Parker
+MRN:                   BMC-2026-087341
+DOB:                   11/08/1965
+ADMISSION DATE:        02/18/2026
+DISCHARGE DATE:        02/18/2026 (Deceased)
+ATTENDING PHYSICIAN:   Dr. Michael Torres, MD
+
+----------------------------------------------------
+CHIEF COMPLAINT
+----------------------------------------------------
+Patient found unresponsive at home by building
+superintendent. 911 called. Paramedics found patient
+in cardiac arrest with signs of cerebrovascular event.
+
+----------------------------------------------------
+HISTORY OF PRESENT ILLNESS
+----------------------------------------------------
+60-year-old male with history of atrial fibrillation,
+chronic alcoholism, and non-compliance with prescribed
+anticoagulation therapy. Patient was last seen alive
+by neighbor on evening of February 17, 2026.
+Building superintendent found patient unresponsive
+on morning of February 18 when checking on him
+after missed rent payment.
+
+----------------------------------------------------
+PAST MEDICAL HISTORY
+----------------------------------------------------
+- Atrial fibrillation (diagnosed 2020)
+- Chronic alcoholism
+- Hypertension (poorly controlled)
+- Non-compliant with warfarin therapy
+- Depression (untreated)
+
+----------------------------------------------------
+HOSPITAL COURSE
+----------------------------------------------------
+Patient arrived in ED at 08:45 via EMS. GCS 3.
+CT head showed massive left hemispheric hemorrhagic
+stroke with midline shift. Neurosurgery consulted.
+Given extent of damage and poor prognosis, comfort
+measures initiated per next-of-kin (sister, Patricia
+Parker, reached by phone). Patient expired at 09:15.
+
+TIME OF DEATH: 09:15 EST
+
+----------------------------------------------------
+FINAL DIAGNOSIS
+----------------------------------------------------
+1. Hemorrhagic cerebrovascular accident (massive)
+2. Atrial fibrillation - uncontrolled
+3. Chronic alcoholism
+4. Hypertension - uncontrolled
+
+----------------------------------------------------
+CAUSE OF DEATH
+----------------------------------------------------
+Immediate:    Cerebrovascular Accident (Stroke)
+Due to:       Atrial Fibrillation
+Contributing: Chronic Alcoholism
+
+Manner of Death: Natural
+
+====================================================
+Electronically signed: Dr. Michael Torres, MD
+Date: 02/19/2026
+Boston Medical Center, Boston MA 02118
+====================================================

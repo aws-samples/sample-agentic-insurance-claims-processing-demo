@@ -1,0 +1,256 @@
+# CCOE Insurance Industry LLC - Death Benefits Claims Processing
+# Agent Configuration - Uses Amazon Bedrock AgentCore with Strands SDK 1.28.0
+
+supervisor:
+  name: "SupervisorAgent"
+  description: "Orchestrates death benefits claims processing workflow"
+  model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  temperature: 0.1
+  max_tokens: 4096
+  use_guardrails: true
+  
+  # Workflow configuration for Death Benefits claims
+  workflow:
+    standard_claim:
+      - authenticator
+      - extractor
+      - policy_verification
+      - fraud_detection
+      - adjudication
+    
+    expedited_claim:
+      - authenticator
+      - policy_verification
+      - adjudication
+      conditions:
+        - claim_amount < 10000
+        - policy_active
+        - no_fraud_indicators
+    
+    high_value_claim:
+      - authenticator
+      - extractor
+      - policy_verification
+      - fraud_detection
+      - adjudication
+      - human_review
+      conditions:
+        - claim_amount >= 50000
+
+authenticator:
+  name: "AuthenticatorAgent"
+  description: "Validates beneficiary identity and claim authenticity"
+  model_id: "anthropic.claude-3-haiku-20240307-v1:0"
+  temperature: 0.0
+  max_tokens: 2048
+  use_guardrails: true
+  confidence_threshold: 0.85
+  
+  validation_checks:
+    - beneficiary_identity
+    - policy_holder_relationship
+    - claim_form_completeness
+    - signature_verification
+
+extractor:
+  name: "ExtractorAgent"
+  description: "OCR and intelligent document processing"
+  model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  temperature: 0.0
+  max_tokens: 4096
+  use_guardrails: true
+  use_textract: true
+  use_comprehend_medical: true
+  
+  supported_documents:
+    - death_certificate
+    - medical_records
+    - policy_documents
+    - beneficiary_id
+    - claim_form
+    - autopsy_report
+    - police_report
+  
+  extraction_fields:
+    death_certificate:
+      - deceased_name
+      - date_of_death
+      - cause_of_death
+      - place_of_death
+      - certifying_physician
+      - certificate_number
+    
+    medical_records:
+      - patient_name
+      - diagnosis
+      - treatment_dates
+      - icd_codes
+      - physician_name
+    
+    policy_documents:
+      - policy_number
+      - policy_holder_name
+      - coverage_amount
+      - effective_date
+      - beneficiaries
+
+policy_verification:
+  name: "PolicyVerificationAgent"
+  description: "Validates coverage, policy status, and exclusions"
+  model_id: "anthropic.claude-3-haiku-20240307-v1:0"
+  temperature: 0.0
+  max_tokens: 2048
+  use_guardrails: true
+  use_knowledge_base: true
+  
+  verification_checks:
+    - policy_active_status
+    - premium_payment_status
+    - coverage_amount
+    - beneficiary_designation
+    - exclusions_check
+    - contestability_period
+    - suicide_clause
+  
+  auto_deny_conditions:
+    - policy_lapsed
+    - premium_unpaid_90_days
+    - excluded_cause_of_death
+    - contestability_period_fraud
+
+fraud_detection:
+  name: "FraudDetectionAgent"
+  description: "AI-powered fraud pattern detection"
+  model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  temperature: 0.2
+  max_tokens: 3072
+  use_guardrails: true
+  use_knowledge_base: true
+  risk_threshold: 0.7
+  
+  fraud_indicators:
+    high_risk:
+      - recent_policy_purchase
+      - beneficiary_change_before_death
+      - suspicious_cause_of_death
+      - conflicting_information
+      - missing_critical_documents
+      - unusual_claim_patterns
+    
+    medium_risk:
+      - incomplete_documentation
+      - delayed_reporting
+      - multiple_policies
+      - high_coverage_amount
+    
+    low_risk:
+      - natural_causes
+      - long_standing_policy
+      - complete_documentation
+      - consistent_information
+  
+  scoring:
+    high_risk_weight: 0.4
+    medium_risk_weight: 0.2
+    low_risk_weight: -0.1
+    escalation_threshold: 0.7
+
+adjudication:
+  name: "AdjudicationAgent"
+  description: "Makes approval/denial decisions with human-in-the-loop"
+  model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  temperature: 0.1
+  max_tokens: 3072
+  use_guardrails: true
+  use_knowledge_base: true
+  
+  decision_thresholds:
+    auto_approve_amount: 50000
+    auto_approve_conditions:
+      - fraud_score < 0.3
+      - policy_active
+      - all_documents_valid
+      - no_exclusions
+      - premium_current
+    
+    auto_deny_conditions:
+      - policy_lapsed
+      - excluded_cause
+      - fraud_score > 0.8
+      - contestability_fraud
+    
+    human_review_conditions:
+      - claim_amount >= 50000
+      - fraud_score >= 0.5 and fraud_score <= 0.8
+      - missing_documents
+      - policy_exclusion_unclear
+      - complex_medical_cause
+  
+  payout_calculation:
+    base_coverage: true
+    accidental_death_benefit: true
+    interest_calculation: true
+    deduct_outstanding_loans: true
+
+# Well-Architected Framework Alignment
+well_architected:
+  operational_excellence:
+    - automated_monitoring
+    - structured_logging
+    - performance_metrics
+    - continuous_improvement
+  
+  security:
+    - guardrails_enabled
+    - pii_anonymization
+    - encryption_at_rest
+    - encryption_in_transit
+    - least_privilege_iam
+    - audit_logging
+  
+  reliability:
+    - error_handling
+    - retry_logic
+    - timeout_management
+    - graceful_degradation
+  
+  performance_efficiency:
+    - right_sized_models
+    - caching_strategy
+    - parallel_processing
+    - optimized_prompts
+  
+  cost_optimization:
+    - model_selection_by_task
+    - token_usage_monitoring
+    - resource_tagging
+    - auto_scaling
+  
+  sustainability:
+    - efficient_model_usage
+    - minimal_reprocessing
+    - optimized_storage
+
+# Industry Standards Compliance
+compliance:
+  hipaa:
+    - phi_protection
+    - access_controls
+    - audit_trails
+    - encryption
+  
+  sox:
+    - financial_controls
+    - audit_logging
+    - segregation_of_duties
+  
+  gdpr:
+    - data_minimization
+    - right_to_erasure
+    - consent_management
+  
+  insurance_regulations:
+    - fair_claims_handling
+    - timely_processing
+    - transparent_decisions
+    - appeals_process

@@ -1,0 +1,44 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY (CANCELLED)
+====================================================
+
+POLICY NUMBER:         LIP-2020-067123
+POLICY TYPE:           Term Life Insurance (10 Year)
+STATUS:                *** CANCELLED ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Victor Alejandro Reyes
+Date of Birth:         April 3, 1972
+Address:               1920 Palm Beach Blvd
+                       Fort Myers, FL 33901
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        March 1, 2020
+Face Amount:           $50,000.00
+Premium:               $85.00/month
+Premium Status:        N/A (Cancelled)
+
+----------------------------------------------------
+CANCELLATION DETAILS
+----------------------------------------------------
+Cancellation Date:     November 15, 2025
+Reason:                Policyholder requested cancellation
+Replacement Policy:    LIP-2025-112847 ($500,000)
+                       Effective December 1, 2025
+
+*** NOTE: Coverage increased 10x (from $50K to $500K)
+    within 16 days of cancelling previous policy.
+    This pattern is flagged for fraud review. ***
+
+----------------------------------------------------
+BENEFICIARY (at cancellation)
+----------------------------------------------------
+Primary Beneficiary:   Carlos Reyes (Brother)
+                       100% of death benefit
+
+====================================================

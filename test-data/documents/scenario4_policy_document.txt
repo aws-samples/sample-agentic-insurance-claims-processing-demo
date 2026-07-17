@@ -1,0 +1,51 @@
+====================================================
+     CCOE INSURANCE INDUSTRY LLC
+     LIFE INSURANCE POLICY SUMMARY
+====================================================
+
+POLICY NUMBER:         LIP-2015-023456
+POLICY TYPE:           Whole Life Insurance
+STATUS:                *** ACTIVE - IN FORCE ***
+
+----------------------------------------------------
+POLICY HOLDER
+----------------------------------------------------
+Name:                  Elizabeth Grace Thornton
+Date of Birth:         January 28, 1955
+Address:               450 Park Avenue, Apt 22C
+                       New York, NY 10022
+
+----------------------------------------------------
+COVERAGE DETAILS
+----------------------------------------------------
+Effective Date:        April 1, 2015
+Face Amount:           $750,000.00
+Death Benefit:         $750,000.00
+Premium:               $1,850.00/month
+Premium Status:        Current (paid through March 2026)
+Cash Value:            $198,450.00
+
+----------------------------------------------------
+BENEFICIARY DESIGNATION
+----------------------------------------------------
+Primary Beneficiary:   Thornton Family Trust
+                       (EIN: XX-XXX4892)
+                       60% of death benefit ($450,000)
+Secondary:             Catherine Thornton-Wells (Daughter)
+                       40% of death benefit ($300,000)
+
+----------------------------------------------------
+RIDERS
+----------------------------------------------------
+Accidental Death:      Included
+Waiver of Premium:     Included
+Long-Term Care:        Included
+Contestability:        Period expired (policy > 10 years)
+
+----------------------------------------------------
+NOTE: Claim amount exceeds $50,000 threshold.
+Per company policy, requires senior adjuster review
+regardless of automated processing outcome.
+----------------------------------------------------
+
+====================================================

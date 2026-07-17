@@ -1,0 +1,35 @@
+====================================================
+     METHODIST HOSPITAL - HOUSTON, TX
+     PATIENT MEDICAL RECORDS SUMMARY
+====================================================
+Patient: Samuel Thomas Rivera
+DOB: 11/08/1975   MRN: MH-2024-78921
+----------------------------------------------------
+ADMISSION RECORD - July 18, 2026
+----------------------------------------------------
+Chief Complaint: Patient brought to ER by spouse
+after collapsing at home at approximately 3:15 AM.
+
+Diagnosis: Acute ST-elevation myocardial infarction
+(STEMI) leading to cardiac arrest.
+
+History: Patient had documented hypertension (managed
+with lisinopril 20mg) and Type 2 Diabetes (metformin
+1000mg BID). Regular cardiology follow-ups. Last
+checkup April 2026 showed controlled BP 128/82.
+
+ED Course: Arrived unresponsive. CPR initiated by
+paramedics en route. No pulse on arrival. ACLS
+protocol followed for 45 minutes. Time of death
+pronounced 03:42 AM.
+
+Attending: Dr. Angela Morales, MD (Cardiology)
+----------------------------------------------------
+PRIOR HISTORY (Relevant)
+----------------------------------------------------
+- Hypertension diagnosed 2018, well-controlled
+- Type 2 Diabetes diagnosed 2020, A1C 6.8
+- No prior cardiac events
+- Non-smoker, moderate exercise
+- Family history: father died of MI at age 62
+====================================================
