@@ -15,17 +15,11 @@
 - **Makes structured decisions** (approve, deny, escalate) with transparent reasoning, confidence scores, and fraud risk assessment — grounded in policy data and uploaded documents
 - **Communicates with empathy** — AI responses acknowledge bereavement, with heightened sensitivity for military/combat losses and referrals to SGLI/VA benefits
 - **Enforces compliance** via Amazon Bedrock Guardrails (content filtering, PII anonymization, prompt attack detection) and application-layer input validation
-- **Provides three role-based portals** — Claimant submission + chatbot, Adjuster review workbench with 8-step AI flow visualization, Business analytics dashboard
-- **Supports 9 pre-configured test scenarios** covering auto-approve, auto-deny (lapsed policy, fraud, exclusions), and human escalation paths
+- **Three role-based portals** — Claimant submission + AI chatbot, Adjuster review workbench with 8-step AI flow visualization, Business analytics dashboard with real-time metrics
+- **9 pre-configured test scenarios** with Demo Quick-Fill dropdown — covering auto-approve, auto-deny (lapsed policy, fraud, exclusions), and human escalation paths
 - **Event-driven processing** via Amazon EventBridge with Dead Letter Queue, retry logic, and claim resubmission workflow
+- **Document verification** — AI reads uploaded documents (death certificates, medical records, IDs) and includes findings in adjudication. Plain text in demo; architecture supports Textract/Comprehend Medical for production (see Production Evolution Path)
 - **One-click deployment** — Automated `deploy.sh` handles CDK infrastructure, Docker agent builds, Knowledge Base setup, and frontend deployment
-- **Three User Portals** — Claimant submission, Adjuster review workbench, Business analytics dashboard
-- **AI Claims Assistant Chatbot** — Empathetic FAQ chatbot for claimants (auto-opens, powered by Amazon Bedrock)
-- **AI Processing Flow Visualization** — 8-step multi-agent pipeline sidebar in Adjuster Workbench with real-time status
-- **Document Verification** — AI reads uploaded documents (death certificates, medical records, IDs) and includes findings in adjudication
-- **9 Demo Scenarios** — Pre-configured test cases covering auto-approve, auto-deny, fraud detection, and human escalation
-- **Demo Quick-Fill** — Dropdown selector auto-fills all 9 test scenarios for rapid demonstration
-- **Real-time Metrics** — Live dashboard with STP rate, AI agent activity, fraud detection, and claims overview table
 
 ## Architecture
 
@@ -348,7 +342,7 @@ This solution is a functional demonstration of AI-powered claims processing. For
 | Feature | Demo Behavior | Production Implementation |
 |---------|---------------|---------------------------|
 | **Policy Database** | In-memory Python dictionary (`POLICY_DATABASE` in claims_handler.py) with 9 pre-seeded policies. | Connect to an actual policy management system (e.g., DynamoDB table, external API, or legacy mainframe integration) with real-time policy status lookups. |
-| **Document Verification** | AI reads document text and cross-references claim data. No OCR or handwriting recognition. | Add Amazon Textract for scanned documents, Bedrock Data Automation for structured extraction, and implement document classification ML before analysis. |
+| **Document Verification** | AI reads plain text document content and cross-references claim data. No OCR, image processing, or handwriting recognition. | See Production Evolution Path below — add Textract, Comprehend Medical, Claude Vision, and Bedrock Data Automation for multimodal document processing. |
 | **MCP Server Data** | Not applicable — all data is self-contained in DynamoDB and S3. | For enterprise integration, add MCP servers for external data feeds (mortality databases, fraud registries, policy admin systems). |
 | **Self-Signup** | Cognito allows self-registration (required for demo Quick-Fill scenarios). | Disable self-signup. Use admin-created accounts with enterprise SSO (SAML/OIDC) federation. |
 | **IAM Permissions** | Per-function least-privilege roles. Each Lambda has its own role scoped to only the resources it needs (e.g., ChatHandler can only invoke Bedrock, MetricsHandler has read-only DDB access). | Already implemented. For additional hardening: add resource-level conditions (e.g., `aws:SourceArn`), implement IAM Access Analyzer continuous monitoring. |
@@ -363,6 +357,18 @@ This solution is a functional demonstration of AI-powered claims processing. For
 | **Document Upload Limits** | No server-side file size enforcement on document uploads. | Add `Content-Length` validation in the upload handler (e.g., 10MB max). Prevents cost abuse via arbitrarily large files filling S3 and triggering storage quotas. |
 | **EventBridge Resource Policy** | `claims-processing-bus` relies solely on IAM grants with no explicit resource policy. | Add an EventBridge resource policy restricting `PutEvents` to specific source ARNs. Provides defense-in-depth against event injection if an adjacent role is compromised. |
 | **Prompt Injection Detection** | 5 English-only regex patterns in `INJECTION_PATTERNS`. Misses encoded payloads and multilingual attacks. | Replace with layered defense: structural input validation + LLM-based classifier + Bedrock Guardrails content filters. Cover base64 encoding, Unicode obfuscation, and multilingual jailbreak techniques. |
+
+### Production Evolution Path
+
+This demo showcases the multi-agent orchestration pattern. Production deployments would extend it with ML models, multimodal document processing, and autonomous learning:
+
+| Capability | Demo Approach | Production Extension |
+|-----------|---------------|----------------------|
+| **Multimodal Document Processing** | Uploaded documents are plain text files. AI reads text content directly. No OCR, no image processing, no handwriting recognition. | Add Amazon Textract for scanned PDFs and handwritten forms. Use Bedrock Data Automation for document classification (death certificate vs. medical record vs. ID). Send document images to Claude's vision capability to detect signatures, stamps, watermarks, and alterations. Integrate Amazon Comprehend Medical for ICD code extraction from physician statements. |
+| **ML-Powered Risk Scoring (SageMaker)** | LLM-only decision making based on prompt reasoning. | Deploy SageMaker endpoints for claims risk scoring (trained on historical adjudication outcomes), fraud probability models (features: claim patterns, timing, amounts), and processing time prediction. Feed ML scores to agents as structured input alongside RAG context. |
+| **Self-Healing & Continuous Learning** | Each claim processed independently. No feedback from adjuster overrides. | Track overturn rate (claims where adjusters override AI decisions). Auto-retrain when override rate exceeds threshold. Auto-requeue claims on transient agent failures. Build automated SIU (Special Investigations Unit) workflow triggered by fraud score patterns. |
+| **Semantic Memory** | No cross-claim intelligence. Each claim evaluated in isolation. | Vector-index fraud investigation outcomes and claim patterns. Enable cross-claim relationship detection (same beneficiary filing multiple claims, same physician across suspicious claims). Historical decision retrieval for consistency. |
+| **Episodic Memory** | No cross-session continuity. | Store complete claim processing episodes (submission → documents → agent reasoning → decision → adjuster action → outcome). Enables regulatory audit replay, pattern learning across claim types, and adjuster training from AI decision examples. |
 
 ## Security
 

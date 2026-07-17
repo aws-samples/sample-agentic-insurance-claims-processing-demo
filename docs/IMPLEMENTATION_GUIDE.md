@@ -210,6 +210,20 @@ The `POLICY_DATABASE` dict in `backend/lambda/claims/claims_handler.py` contains
 
 ---
 
+## Production Integration Points
+
+The demo architecture has specific hooks designed for production service integration:
+
+| Service | Current State | Production Integration |
+|---------|---------------|----------------------|
+| Amazon Textract | IAM permission granted (`textract:AnalyzeDocument`), not invoked | Call from Extractor agent before LLM processing — OCR scanned PDFs, extract tables from death certificates |
+| Amazon Comprehend Medical | IAM permission granted (`comprehendmedical:DetectEntitiesV2`), not invoked | Call from Extractor agent — extract ICD-10 codes, medications, and diagnoses from medical records |
+| Amazon SageMaker | Not configured | Deploy fraud scoring endpoint, call from Fraud Detection agent as structured input alongside RAG context |
+| External Policy Systems | In-memory `POLICY_DATABASE` dict | Replace with DynamoDB table or API call to policy administration system (Guidewire, Duck Creek, etc.) |
+| Document Classification | Documents categorized by upload folder name | Use Bedrock Data Automation to auto-classify document types before routing to appropriate extraction logic |
+
+---
+
 **For complete deployment steps**: [DEPLOYMENT_GUIDE.md](../DEPLOYMENT_GUIDE.md)
 **For test scenarios**: [DEMO_TESTING_GUIDE.md](DEMO_TESTING_GUIDE.md)
 **For architecture**: [ARCHITECTURE.md](ARCHITECTURE.md)

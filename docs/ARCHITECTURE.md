@@ -279,3 +279,21 @@ See [scripts/deploy.sh](../scripts/deploy.sh) for the automated deployment scrip
 | S3 + CloudFront | $5–10 |
 | Other (API GW, CloudWatch, ECR) | $10–20 |
 | **Total** | **$160–305** |
+
+
+---
+
+## Production Extensions
+
+The architecture supports progressive enhancement without restructuring the agent pipeline:
+
+| Extension | Integration Point | AWS Services |
+|-----------|-------------------|--------------|
+| Multimodal document processing | Extractor agent — replace text-only ingestion with OCR + image analysis | Amazon Textract, Bedrock Data Automation, Claude Vision |
+| Medical entity extraction | Extractor agent — structured ICD-10 code extraction from physician statements | Amazon Comprehend Medical |
+| ML fraud scoring | Fraud Detection agent — supplement LLM reasoning with trained models | SageMaker (XGBoost/AutoML), S3 (training data from historical claims) |
+| Cross-claim intelligence | All agents — retrieve related claim patterns before processing | OpenSearch Serverless (vector index), Bedrock Knowledge Bases |
+| Automated SIU workflows | Post-adjudication — trigger investigation workflows on fraud patterns | Step Functions, EventBridge rules, SNS |
+| Continuous learning | Feedback loop — adjuster overrides retrain fraud and risk models | SageMaker Pipelines, CloudWatch custom metrics |
+
+The agent IAM roles already include `textract:AnalyzeDocument` and `comprehendmedical:DetectEntitiesV2` permissions — these services can be integrated into the Extractor agent without infrastructure changes.
