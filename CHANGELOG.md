@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+- Bumped `eslint-plugin-react-hooks` from `^4.6.0` to `^7.1.1` in `frontend/` to support ESLint 10, resolving an ERESOLVE peer conflict that broke `npm ci` on a fresh clone (regenerated lockfile; `npm ci` and build now pass without `--legacy-peer-deps`)
+- Patched frontend dev dependencies via non-breaking `npm audit fix` (cleared `brace-expansion` and `nanoid` high-severity advisories surfaced during lockfile regeneration)
+
+### Security
+- Added non-production sample-code disclaimer to the README Security section
+
+### Documentation
+- Documented the ESLint peer conflict fix (issue #9) and a pre-existing broken lint config on ESLint 10 (issue #10) in `docs/KNOWN_ISSUES.md`
+
 ## [1.0.0] - 2026-07-07
 
 ### Added

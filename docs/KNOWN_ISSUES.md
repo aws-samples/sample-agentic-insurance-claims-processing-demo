@@ -236,3 +236,48 @@ npx aws-cdk@latest deploy LifeInsuranceAgentStack --exclusively --require-approv
 ```
 
 **Prevention:** Consider refactoring `POLICY_DATABASE` into a shared module or loading it from DynamoDB/S3 so both paths use the same source of truth. For now, always update both files when adding scenarios.
+
+---
+
+## 9. `npm ci` Fails in `frontend/` with ERESOLVE Peer Conflict
+
+**Symptom:** A fresh clone running `npm ci` (or `npm install`) in `frontend/` fails with:
+```
+npm error ERESOLVE could not resolve
+npm error Conflicting peer dependency: eslint@8.57.1
+npm error   peer eslint@"...^8.0.0-0" from eslint-plugin-react-hooks@4.6.2
+```
+
+**Root Cause:** The project pinned `eslint@^10.8.0`, but `eslint-plugin-react-hooks@^4.6.0` only declares an eslint peer range up to v8. npm refuses to resolve the tree because the plugin does not permit eslint 10.
+
+**Fix:** Bump the plugin to a version that supports eslint 10 and regenerate the lockfile:
+```bash
+cd frontend
+# package.json: "eslint-plugin-react-hooks": "^7.1.1"
+npm install
+npm ci   # verify a clean install now succeeds
+```
+`eslint-plugin-react-hooks@7.1.1` declares an eslint peer range that includes `^10.0.0`. This has been applied — `npm ci` and `npm run build` now succeed without `--legacy-peer-deps`.
+
+**Prevention:** When bumping a major eslint version, check the peer ranges of every eslint plugin before pinning. Keep plugin majors aligned with the eslint major.
+
+---
+
+## 10. `npm run lint` Fails — Missing Flat Config on ESLint 10
+
+**Symptom:** `npm run lint` in `frontend/` errors with:
+```
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+```
+
+**Root Cause:** The repo is on eslint 10, which requires the flat config format (`eslint.config.js`) and dropped the `--ext` flag. There is no `eslint.config.js` in `frontend/`, and the `lint` npm script still uses the removed `eslint . --ext ts,tsx ...` syntax. This is a pre-existing configuration gap, independent of any dependency bump — linting was already non-functional.
+
+**Fix:** Add a flat `eslint.config.js` (migrating any prior `.eslintrc` rules) and update the `lint` script to drop `--ext`:
+```jsonc
+// package.json
+"lint": "eslint ."
+```
+Then author `frontend/eslint.config.js` using the flat-config format with the TypeScript and react-hooks plugins. See the ESLint migration guide: https://eslint.org/docs/latest/use/configure/migration-guide
+
+**Prevention:** Treat a lint run as part of build verification so config drift is caught early. Not yet fixed — tracked for a follow-up change (out of scope for the dependency/security cleanup).
