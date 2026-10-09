@@ -303,3 +303,16 @@ Then author `frontend/eslint.config.js` using the flat-config format with the Ty
 **Prevention:** Apply an ownership/authorization check on every read AND write path that touches per-user records (including document upload/list), not only on the claim-status writes — field-level filtering is not a substitute for record-level authorization. Record the owning principal from the verified token at creation time so every endpoint has something to check against.
 
 **Note on existing data:** claims created before this change have no `claimantUsername` and will therefore be treated as not-owned by any Claimant (they fail closed to 404 for Claimants; Adjusters/BusinessUsers still see them). A demo reset (`POST /reset`) or fresh deploy produces only owned claims.
+
+
+---
+
+## 12. `npm audit` / Dependabot: residual dev-tool advisories (postcss-selector-parser) — deferred
+
+**Symptom:** After clearing the axios and brace-expansion alerts, a residual Dependabot/`npm audit` finding remains for `postcss-selector-parser` (and related Tailwind/PostCSS build-chain packages such as `source-map-js`).
+
+**Root Cause:** These are transitive build-time dependencies of `tailwindcss`/PostCSS. They run only during `npm run build` to generate the static CSS/JS and are **not** included in the deployed Lambda or frontend runtime bundle. The advisories are ReDoS / CPU-exhaustion issues reachable only when an attacker controls the build inputs (selectors), which is not a runtime exposure for this sample.
+
+**Fix:** Intentionally deferred. The only remediation `npm audit fix --force` offers bumps `tailwindcss` to a new major version, which carries breaking changes (config format and utility-class changes) that would require re-validating the frontend's styling. We do not bundle a breaking major upgrade into routine security-patch work.
+
+**Prevention / when to act:** If a fully clean `npm audit` is required, perform a dedicated Tailwind major upgrade on its own branch, rebuild the frontend, and visually verify before merging. Treat it as a tracked UI task, not a dependency patch.
