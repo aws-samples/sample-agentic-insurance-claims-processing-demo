@@ -59,6 +59,61 @@ def response(status_code, body):
     }
 
 
+def _get_user_info(event):
+    """Extract user identity and groups from the Cognito authorizer claims."""
+    claims = event.get('requestContext', {}).get('authorizer', {}).get('claims', {})
+    return {
+        'username': claims.get('cognito:username', claims.get('sub', 'unknown')),
+        'groups': claims.get('cognito:groups', ''),
+    }
+
+
+def _is_claimant_only(user_info):
+    """True if the caller is an ordinary Claimant with no privileged role.
+
+    Adjusters and BusinessUsers may act on any claim's documents; ordinary
+    Claimants may only act on documents for claims they own.
+    """
+    groups = user_info.get('groups', '').lower()
+    return (
+        'claimants' in groups
+        and 'adjusters' not in groups
+        and 'businessusers' not in groups
+    )
+
+
+def _get_claim_owner(claim_id):
+    """Return the claimantUsername recorded on a claim, or None if the claim
+    does not exist or predates ownership tracking."""
+    from boto3.dynamodb.conditions import Key as DDBKey
+    result = table.query(
+        KeyConditionExpression=DDBKey('claimId').eq(claim_id),
+        Limit=1,
+    )
+    items = result.get('Items', [])
+    if not items:
+        return None, False  # claim not found
+    return items[0].get('claimantUsername'), True  # (owner, exists)
+
+
+def _authorize_claim_access(event, claim_id):
+    """Ownership gate for document operations on a claim.
+
+    Returns an error response to short-circuit with, or None if the caller is
+    allowed to proceed. Ordinary Claimants may only touch their own claim's
+    documents; a non-owner receives 404 (so a non-owner cannot even confirm
+    the claim exists). Adjusters/BusinessUsers are always allowed.
+    """
+    user_info = _get_user_info(event)
+    if not _is_claimant_only(user_info):
+        return None  # privileged roles may access any claim's documents
+
+    owner, exists = _get_claim_owner(claim_id)
+    if not exists or owner != user_info['username']:
+        return response(404, {'error': 'Claim not found'})
+    return None
+
+
 def upload_documents(event):
     """
     Upload one or more documents to S3 for a claim.
@@ -74,6 +129,14 @@ def upload_documents(event):
        }
     """
     claim_id = event['pathParameters']['claimId']
+
+    # Ownership gate: an ordinary Claimant may only upload documents to their
+    # own claim, so one claimant cannot inject or tamper with another's
+    # evidence (which feeds the AI decision).
+    auth_err = _authorize_claim_access(event, claim_id)
+    if auth_err:
+        return auth_err
+
     body = json.loads(event.get('body', '{}'))
 
     # Normalize to list
@@ -179,8 +242,12 @@ def upload_documents(event):
 
 
 def list_documents(event):
-    """List all documents for a claim"""
+    """List all documents for a claim (owner or privileged roles only)."""
     claim_id = event['pathParameters']['claimId']
+
+    auth_err = _authorize_claim_access(event, claim_id)
+    if auth_err:
+        return auth_err
 
     # List objects in S3 with claim_id prefix
     result = s3.list_objects_v2(

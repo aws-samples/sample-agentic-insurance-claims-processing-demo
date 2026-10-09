@@ -281,3 +281,25 @@ From ESLint v9.0.0, the default configuration file is now eslint.config.js.
 Then author `frontend/eslint.config.js` using the flat-config format with the TypeScript and react-hooks plugins. See the ESLint migration guide: https://eslint.org/docs/latest/use/configure/migration-guide
 
 **Prevention:** Treat a lint run as part of build verification so config drift is caught early. Not yet fixed — tracked for a follow-up change (out of scope for the dependency/security cleanup).
+
+
+---
+
+## 11. Claims read endpoints lacked per-claimant ownership checks (FIXED)
+
+**Symptom:** Any authenticated user in the ordinary `Claimants` Cognito group could list every claim in the system (`GET /claims`) and read any other claimant's full death-benefit claim by ID (`GET /claims/{claimId}`), exposing beneficiary name, relationship, date/cause of death, and claim amount for claims they did not own. (CWE-862 Missing Authorization; CWE-639 IDOR on the `claimId` path parameter.)
+
+**Root Cause:** `list_claims()` returned an unfiltered `table.scan()`, and `get_claim()` filtered only *which fields* were returned (hiding AI-internal fraud score / decision / confidence from Claimants) but never checked *which claims* a claimant was allowed to read. Claims were also stored without any owner attribute, so there was nothing to check against. The write endpoints (`update_claim`, `approve_claim`, `deny_claim`) already gated by role via `_require_group`, but the two read paths did not.
+
+**Fix:**
+- `create_claim()` now records the authenticated submitter as `claimantUsername`, taken from the Cognito-verified identity (`cognito:username`), never from the request body.
+- `get_claim()` returns `404` when an ordinary `Claimants`-group caller requests a claim whose `claimantUsername` is not theirs (404 rather than 403 so a non-owner cannot even confirm the claim exists). The existing AI-field filtering for Claimants is unchanged.
+- `list_claims()` filters results to the caller's own claims for ordinary Claimants. `Adjusters` and `BusinessUsers` continue to see every claim, as the role model intends.
+- A shared `_is_claimant_only()` helper centralizes the "ordinary Claimant with no privileged role" check used by both read paths.
+- Verified by `tests/test_claims_authorization.py` (dependency-free), which reproduces the reported Alice/Carol PoC and asserts the non-owner now receives 404 with no PII in the body, while adjusters/business users retain full access.
+
+**Related fix — document endpoints (`documents_handler.py`):** the same class of gap existed, unauthorized, on the document operations. `GET /claims/{claimId}/documents` (`list_documents`) let any authenticated user list another claimant's uploaded documents (death certificates, beneficiary IDs, medical records), and `POST /claims/{claimId}/documents` (`upload_documents`) let any authenticated user upload documents into another claimant's claim — which then feed the AI decision. Both now call a shared `_authorize_claim_access()` gate that looks up the claim's `claimantUsername` and returns `404` for an ordinary Claimant acting on a claim they do not own, while allowing Adjusters/BusinessUsers. Covered by the same test file.
+
+**Prevention:** Apply an ownership/authorization check on every read AND write path that touches per-user records (including document upload/list), not only on the claim-status writes — field-level filtering is not a substitute for record-level authorization. Record the owning principal from the verified token at creation time so every endpoint has something to check against.
+
+**Note on existing data:** claims created before this change have no `claimantUsername` and will therefore be treated as not-owned by any Claimant (they fail closed to 404 for Claimants; Adjusters/BusinessUsers still see them). A demo reset (`POST /reset`) or fresh deploy produces only owned claims.
