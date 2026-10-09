@@ -68,18 +68,35 @@ def _get_user_info(event):
     }
 
 
-def _is_claimant_only(user_info):
-    """True if the caller is an ordinary Claimant with no privileged role.
+def _parse_groups(user_info):
+    """Parse the raw Cognito group claim into a set of exact, lowercased names.
 
-    Adjusters and BusinessUsers may act on any claim's documents; ordinary
-    Claimants may only act on documents for claims they own.
+    Normalizes the several shapes the `cognito:groups` claim can take (list,
+    "[A, B]" string, or comma/space separated) so membership is tested by
+    exact match, never substring.
     """
-    groups = user_info.get('groups', '').lower()
-    return (
-        'claimants' in groups
-        and 'adjusters' not in groups
-        and 'businessusers' not in groups
-    )
+    raw = user_info.get('groups', '')
+    if isinstance(raw, (list, tuple, set)):
+        tokens = [str(g) for g in raw]
+    else:
+        cleaned = str(raw).strip().strip('[]')
+        tokens = _re.split(r'[,\s]+', cleaned)
+    return {t.strip().strip('"\'').lower() for t in tokens if t.strip()}
+
+
+# Privileged roles that may act across all claims (not just their own).
+_PRIVILEGED_GROUPS = {'adjusters', 'businessusers'}
+
+
+def _is_claimant_only(user_info):
+    """True if the caller must be restricted to claims they own.
+
+    Deny-by-default: anyone not explicitly in a privileged group
+    (Adjusters/BusinessUsers) is treated as an ordinary claimant, so a
+    group-less or unrecognized caller gets the most restrictive treatment
+    rather than falling through to privileged access.
+    """
+    return not bool(_parse_groups(user_info) & _PRIVILEGED_GROUPS)
 
 
 def _get_claim_owner(claim_id):

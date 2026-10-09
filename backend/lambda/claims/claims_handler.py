@@ -50,29 +50,58 @@ def _get_user_info(event):
     }
 
 
+def _parse_groups(user_info):
+    """Parse the raw Cognito group claim into a set of exact, lowercased names.
+
+    The `cognito:groups` claim can arrive in several shapes depending on
+    configuration: a real list, a JSON-ish string like "[Adjusters, Claimants]",
+    or a comma/space separated string. We normalize to a set of exact names so
+    membership is tested by exact match — never substring — which avoids a group
+    named e.g. "Trainee-Adjusters" satisfying an "Adjusters" check.
+    """
+    raw = user_info.get('groups', '')
+    if isinstance(raw, (list, tuple, set)):
+        tokens = [str(g) for g in raw]
+    else:
+        # Strip surrounding brackets/quotes, then split on comma or whitespace.
+        cleaned = str(raw).strip().strip('[]')
+        tokens = re.split(r'[,\s]+', cleaned)
+    return {t.strip().strip('"\'').lower() for t in tokens if t.strip()}
+
+
+# Privileged roles that may act across all claims (not just their own).
+_PRIVILEGED_GROUPS = {'adjusters', 'businessusers'}
+
+
 def _require_group(event, allowed_groups):
-    """Check if user belongs to one of the allowed groups. Returns error response or None."""
-    user_info = _get_user_info(event)
-    user_groups = user_info.get('groups', '')
-    # Groups come as a string like "[Adjusters]" or comma-separated
-    for group in allowed_groups:
-        if group.lower() in user_groups.lower():
-            return None  # Authorized
+    """Check if user belongs to one of the allowed groups (exact match).
+
+    Returns an error response if not authorized, or None if authorized.
+    """
+    groups = _parse_groups(_get_user_info(event))
+    allowed = {g.lower() for g in allowed_groups}
+    if groups & allowed:
+        return None  # Authorized
     return response(403, {'error': 'Forbidden: insufficient permissions'})
 
 
-def _is_claimant_only(user_info):
-    """True if the caller is an ordinary Claimant with no privileged role.
+def _is_privileged(user_info):
+    """True only if the caller is explicitly in a privileged group
+    (Adjusters or BusinessUsers), by exact match."""
+    return bool(_parse_groups(user_info) & _PRIVILEGED_GROUPS)
 
-    Adjusters and BusinessUsers are allowed to see every claim (the role model
-    intends this); plain Claimants may only see claims they own.
+
+def _is_claimant_only(user_info):
+    """True if the caller must be restricted to claims they own.
+
+    Deny-by-default: anyone who is NOT explicitly a privileged user
+    (Adjusters/BusinessUsers) is treated as an ordinary claimant. This closes
+    the fail-open gap where a self-registered user with no Cognito group would
+    otherwise be handled like a privileged user and see every claim / all
+    AI-internal fields. Group-less and unrecognized callers get the most
+    restrictive treatment.
     """
-    groups = user_info.get('groups', '').lower()
-    return (
-        'claimants' in groups
-        and 'adjusters' not in groups
-        and 'businessusers' not in groups
-    )
+    return not _is_privileged(user_info)
 
 
 class DecimalEncoder(json.JSONEncoder):
