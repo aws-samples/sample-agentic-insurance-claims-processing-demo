@@ -61,6 +61,20 @@ def _require_group(event, allowed_groups):
     return response(403, {'error': 'Forbidden: insufficient permissions'})
 
 
+def _is_claimant_only(user_info):
+    """True if the caller is an ordinary Claimant with no privileged role.
+
+    Adjusters and BusinessUsers are allowed to see every claim (the role model
+    intends this); plain Claimants may only see claims they own.
+    """
+    groups = user_info.get('groups', '').lower()
+    return (
+        'claimants' in groups
+        and 'adjusters' not in groups
+        and 'businessusers' not in groups
+    )
+
+
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, Decimal):
@@ -348,12 +362,17 @@ def create_claim(event):
     claim_id = f"CLM-{datetime.now().strftime('%Y%m%d%H%M%S')}"
     now = int(datetime.now().timestamp())
 
+    # Record the authenticated submitter so ownership can be enforced on reads.
+    # Taken from the Cognito-verified identity, never from the request body.
+    user_info = _get_user_info(event)
+
     claim = {
         'claimId': claim_id,
         'timestamp': now,
         'status': 'submitted',
         'submittedAt': now,
         'updatedAt': now,
+        'claimantUsername': user_info['username'],
         'policyNumber': body.get('policyNumber', ''),
         'policyHolderName': body.get('policyHolderName', ''),
         'beneficiaryName': body.get('beneficiaryName', ''),
@@ -406,9 +425,30 @@ def create_claim(event):
 
 
 def list_claims(event):
-    """List all claims"""
-    result = table.scan()
-    items = result.get('Items', [])
+    """List claims.
+
+    Adjusters and BusinessUsers see all claims. Ordinary Claimants see only
+    the claims they submitted (ownership enforced on claimantUsername), so one
+    claimant cannot enumerate another claimant's death-benefit claims.
+    """
+    user_info = _get_user_info(event)
+
+    # Paginate the scan so filtering is applied across the whole table, not
+    # just the first page.
+    items = []
+    scan_kwargs = {}
+    while True:
+        result = table.scan(**scan_kwargs)
+        items.extend(result.get('Items', []))
+        last_key = result.get('LastEvaluatedKey')
+        if not last_key:
+            break
+        scan_kwargs['ExclusiveStartKey'] = last_key
+
+    if _is_claimant_only(user_info):
+        caller = user_info['username']
+        items = [c for c in items if c.get('claimantUsername') == caller]
+
     items.sort(key=lambda x: x.get('submittedAt', 0), reverse=True)
     return response(200, items)
 
@@ -420,10 +460,15 @@ def get_claim(event):
     if not item:
         return response(404, {'error': 'Claim not found'})
 
-    # Role-based response filtering: hide sensitive AI fields from Claimants
+    # Ownership + role-based response filtering.
     user_info = _get_user_info(event)
-    user_groups = user_info.get('groups', '').lower()
-    if 'claimants' in user_groups and 'adjusters' not in user_groups and 'businessusers' not in user_groups:
+    if _is_claimant_only(user_info):
+        # Ownership check: an ordinary Claimant may only read their own claim.
+        # Return 404 (not 403) so a non-owner cannot even confirm the claim
+        # exists — this closes the enumeration / IDOR path on claimId.
+        if item.get('claimantUsername') != user_info['username']:
+            return response(404, {'error': 'Claim not found'})
+
         # Extract claimant-safe info before removing sensitive fields
         missing_docs = None
         try:
