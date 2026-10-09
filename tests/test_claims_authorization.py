@@ -160,6 +160,45 @@ def test_adjuster_can_read_any_claim_with_ai_fields():
     assert "fraudScore" in item
 
 
+# ── deny-by-default: group-less / unrecognized callers (observation #1) ──
+def test_group_less_user_is_treated_as_claimant_not_privileged():
+    # A self-registered user with NO Cognito group must NOT be handled like a
+    # privileged user. list_claims should return no claims they don't own
+    # (they own none here), not the whole table.
+    _install_fake_table([ALICE_CLAIM, CAROL_CLAIM])
+    resp = claims_handler.list_claims(_event("mallory", ""))
+    assert resp["statusCode"] == 200
+    assert _body(resp) == [], "Group-less user must not see any other claimant's claims"
+
+
+def test_group_less_user_cannot_read_a_claim_by_id():
+    _install_fake_table([ALICE_CLAIM, CAROL_CLAIM])
+    resp = claims_handler.get_claim(_event("mallory", "", "CLM-BBBB-CAROL"))
+    assert resp["statusCode"] == 404, "Group-less user must be denied, not treated as privileged"
+    assert "Dave Beneficiary" not in resp["body"]
+
+
+# ── exact group matching: substring look-alikes are NOT privileged (obs #3) ──
+def test_lookalike_group_is_not_treated_as_adjuster():
+    # "Trainee-Adjusters" contains the substring "adjusters" but is a different
+    # group; it must NOT receive Adjuster privileges (would have under the old
+    # substring match).
+    _install_fake_table([ALICE_CLAIM, CAROL_CLAIM])
+    resp = claims_handler.list_claims(_event("trainee", "Trainee-Adjusters"))
+    assert resp["statusCode"] == 200
+    assert _body(resp) == [], "Look-alike group must not get privileged (all-claims) access"
+
+
+def test_require_group_rejects_lookalike_group():
+    # approve_claim gates on exact 'Adjusters'; a 'Trainee-Adjusters' user must
+    # be rejected with 403.
+    _install_fake_table([ALICE_CLAIM])
+    resp = claims_handler.approve_claim(
+        {**_event("trainee", "Trainee-Adjusters", "CLM-AAAA-ALICE"), "body": "{}"}
+    )
+    assert resp["statusCode"] == 403, "Exact-match group check must reject look-alike group"
+
+
 # ── documents_handler ownership tests ─────────────────────────────────
 sys.path.insert(
     0,

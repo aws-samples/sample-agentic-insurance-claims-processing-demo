@@ -316,3 +316,30 @@ Then author `frontend/eslint.config.js` using the flat-config format with the Ty
 **Fix:** Intentionally deferred. The only remediation `npm audit fix --force` offers bumps `tailwindcss` to a new major version, which carries breaking changes (config format and utility-class changes) that would require re-validating the frontend's styling. We do not bundle a breaking major upgrade into routine security-patch work.
 
 **Prevention / when to act:** If a fully clean `npm audit` is required, perform a dedicated Tailwind major upgrade on its own branch, rebuild the frontend, and visually verify before merging. Treat it as a tracked UI task, not a dependency patch.
+
+
+---
+
+## 13. Claims handler authorization review — follow-on findings
+
+A broader review of `claims_handler.py` after the per-claimant authorization fix (#11) produced the following. Two were fixed; the rest are documented as production-hardening items or corrected.
+
+### Fixed
+
+**Fail-open for group-less / unrecognized callers (High).** The claimant/field-filtering logic used *positive* checks (`'claimants' in groups`), so a caller with no Cognito group — e.g. a self-registered user never added to a group — was treated as privileged and would see every claim and all AI-internal fields. Fixed to **deny-by-default**: `_is_claimant_only()` now returns true for anyone not explicitly in a privileged group (`Adjusters`/`BusinessUsers`), so group-less/unrecognized callers get the most restrictive treatment. Applied in both `claims_handler.py` and `documents_handler.py`. Regression-tested.
+
+**Substring group matching in `_require_group()` (Medium, latent).** The role check used `allowed_group.lower() in user_groups.lower()` (substring), so a group like `Trainee-Adjusters` would satisfy an `Adjusters` check. Not exploitable with the current clean group names, but fragile. Fixed to parse the `cognito:groups` claim into an exact set (`_parse_groups`) and test membership by exact match. Regression-tested.
+
+### Documented as production-hardening (acceptable for this demo)
+
+**`reset_demo()` safeguards (Low).** `reset_demo` is already gated to the `Adjusters` group; the residual concern is that any adjuster can wipe demo data. This is by design for a demo reset button. Production hardening would add a confirmation token or a dedicated admin role.
+
+**No audit logging on read operations (Low–Medium).** Write operations record `actionBy`; reads (`get_claim`, `list_claims`, document list) are not logged. For a system handling death-benefit PII, production should log read access (e.g. CloudTrail data events on the DynamoDB table, or explicit structured log lines) for accountability.
+
+**No response pagination on `list_claims()` (Low).** The DynamoDB scan is now paginated internally (so the ownership filter sees the whole table), but results are returned to the client in a single response rather than paged. Acceptable at demo scale; production should add page-token-based responses.
+
+**CORS default of `*` (Low–Medium).** `ALLOWED_ORIGIN` defaults to `*` in code, but the CDK (`api-stack.ts`) sets it to the specific CloudFront frontend domain on the deployed Lambda, so the deployed demo is not `*`. The `*` only applies if the function is run without the env var. Hardening: default the code to a safe/empty value (fail closed) rather than `*`.
+
+### Corrected (not a valid finding)
+
+**"No input validation on `create_claim()`" — not accurate.** `create_claim()` validates required fields, enforces per-field length limits, validates `claimAmount` is numeric within 1–10,000,000, and scans free-text fields for prompt-injection patterns. No change needed.
